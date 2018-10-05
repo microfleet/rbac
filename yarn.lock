@@ -709,10 +709,10 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@makeomatic/deploy@^8.0.0":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@makeomatic/deploy/-/deploy-8.0.0.tgz#1e6b93e0bff0051427f85f2eec8fcbd6b3c46b9e"
-  integrity sha512-IsDl2aoL9kJYpzdHcxvlo7SvALpIDJVpaetRG7xN9xcAyJEZW1+nOi6dU5doZYwDNcuzKZ7lYrK9xtYcdnsJTw==
+"@makeomatic/deploy@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@makeomatic/deploy/-/deploy-8.0.1.tgz#2fa0d60aa6012e1daa22e53aec478227f200affc"
+  integrity sha512-PJDdfFzvEqT2FKFqJppONuyFkMkzWPUNiq7HiwH87XlLc0Z75Z3G2r+B3n2ohTgsh6z9heAnKLFsCvxBSEZW3w==
   dependencies:
     "@commitlint/cli" "^7.1.2"
     bluebird "^3.5.2"

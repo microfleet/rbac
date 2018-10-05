@@ -17,7 +17,8 @@
   },
   "files": [
     "lib/",
-    "src/"
+    "src/",
+    "schemas/"
   ],
   "publishConfig": {
     "access": "public"
