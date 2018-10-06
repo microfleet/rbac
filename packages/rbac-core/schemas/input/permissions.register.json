@@ -3,20 +3,23 @@
   "type": "object",
   "required": ["serviceName", "value", "name", "version"],
   "properties": {
-    "serviceName": {
-      "$ref": "common#/definitions/serviceName"
+    "version": {
+      "$ref": "Permission#/properties/version"
     },
     "name": {
       "$ref": "Permission#/properties/name"
     },
+    "serviceName": {
+      "$ref": "common#/definitions/serviceName"
+    },
     "value": {
-      "$ref": "Permission#/properties/value"
+      "type": "string",
+      "maxLength": 96,
+      "pattern": "^[a-zA-Z]{3,32}(?:\\.[a-zA-Z]{3,32})*",
+      "description": "permission level"
     },
     "deprecated": {
       "$ref": "Permission#/properties/deprecated"
-    },
-    "version": {
-      "$ref": "Permission#/properties/version"
     }
   }
 }

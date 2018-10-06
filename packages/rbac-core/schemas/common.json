@@ -8,8 +8,19 @@
     },
     "serviceName": {
       "type": "string",
-      "minLength": 3,
-      "maxLength": 32
+      "pattern": "^[a-zA-Z0-9\\-_]{2,31}[a-zA-Z0-9]$",
+      "description": "generic servicen name in the system"
+    },
+    "humanReadable": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 128
+    },
+    "text": {
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 512,
+      "description": "any human readable input"
     }
   }
 }
