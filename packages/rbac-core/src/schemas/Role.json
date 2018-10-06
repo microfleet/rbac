@@ -1,0 +1,37 @@
+{
+  "$id": "Role",
+  "type": "object",
+  "required": ["id", "name", "permissions"],
+  "properties": {
+    "id": {
+      "$ref": "common#/definitions/uint64_id"
+    },
+    "name": {
+      "$ref": "common#/definitions/humanReadable"
+    },
+    "description": {
+      "$ref": "common#/definitions/text"
+    },
+    "permissions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "Permission#/properties/id"
+      }
+    },
+    "meta": {
+      "type": "object",
+      "description": "any scalar meta that could be useful in business logic",
+      "additionalProperties": {
+        "anyOf": [{
+          "type": "string"
+        }, {
+          "type": "boolean"
+        }, {
+          "type": "number"
+        }]
+      }
+    }
+  }
+}
