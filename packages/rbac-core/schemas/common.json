@@ -1,0 +1,15 @@
+{
+  "$id": "common",
+  "definitions": {
+    "uint64_id": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "unique uint64 internal identifier for this particular record"
+    },
+    "serviceName": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 32
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$id": "input.permissions.register",
+  "type": "object",
+  "required": ["serviceName", "value", "name", "version"],
+  "properties": {
+    "serviceName": {
+      "$ref": "common#/definitions/serviceName"
+    },
+    "name": {
+      "$ref": "Permission#/properties/name"
+    },
+    "value": {
+      "$ref": "Permission#/properties/value"
+    },
+    "deprecated": {
+      "$ref": "Permission#/properties/deprecated"
+    },
+    "version": {
+      "$ref": "Permission#/properties/version"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "$id": "Permission",
+  "type": "object",
+  "description": "minimal unit of permissions, string with the unique permission name or a mask",
+  "required": ["id", "name", "value", "version"],
+  "properties": {
+    "id": {
+      "$ref": "common#/definitions/uint64_id"
+    },
+    "reserved": {
+      "type": "boolean",
+      "default": false,
+      "description": "cant be altered when set as reserved"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human readable name, ie `Viewer`"
+    },
+    "value": {
+      "type": "string",
+      "description": "permission itself, ie `users.list` or `*`, which is a wildcard for all",
+      "maxLength": "128",
+      "pattern": "^[a-zA-Z]{3,32}(?:\\.[a-zA-Z]{3,32})*$"
+    },
+    "deprecated": {
+      "type": "boolean",
+      "description": "when set to true - do not use that permission in the future",
+      "default": false
+    },
+    "version": {
+      "type": "string",
+      "description": "semver, so that updates are only happening in the >= fashion",
+      "pattern": "^0|[1-9]\\d*\\.0|[1-9]\\d*\\.0|[1-9]\\d*$",
+      "maxLength": 256
+    }
+  }
+}
