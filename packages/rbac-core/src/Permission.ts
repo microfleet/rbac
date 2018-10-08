@@ -5,16 +5,8 @@
 import assert = require('assert');
 import semver from 'semver';
 
-interface IMicrofleetPermission {
-  id: string;
-  reserved: boolean;
-  name: string;
-  deprecated: boolean;
-  version: string;
-}
-
 class Permission {
-  public static async register(opts: IMicrofleetPermission, storage: IRBACStorage) {
+  public static async register(opts: IMicrofleetPermission, storage: RBAC.IStorage) {
 
   }
 

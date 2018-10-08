@@ -2,6 +2,10 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "./packages",
+    "typeRoots": [
+      "./node_modules/**/@types",
+      "./packages/*/node_modules/**/@types"
+    ],
     "paths": {
       "@microfleet/*": ["./*/src", "./node_modules"]
     }

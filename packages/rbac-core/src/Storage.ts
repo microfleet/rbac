@@ -10,11 +10,9 @@ import merge = require('lodash.merge');
 import memdown from 'memdown';
 import { kConflict, kNotFound } from './Errors';
 
-interface IStorageFilter {
-  prefix?: string;
-}
+type RBACData = RBAC.IPermission;
 
-class RBACMemoryStorage implements IRBACStorage {
+class RBACMemoryStorage implements RBAC.IStorage<RBACData> {
   private storage: LevelUp;
 
   constructor() {
@@ -29,16 +27,16 @@ class RBACMemoryStorage implements IRBACStorage {
         throw kNotFound;
       }
 
-      throw e;
+      return Promise.reject(e);
     }
   }
 
-  public async create(id: string, datum: any) {
+  public async create(id: string, datum: RBACData) {
     assert.equal(await this.exists(id), false, kConflict);
     return this.storage.put(id, datum);
   }
 
-  public async update(id: string, datum: any) {
+  public async update(id: string, datum: RBACData) {
     const original = await this.read(id);
     return this.storage.put(id, merge(original, datum));
   }
@@ -47,11 +45,11 @@ class RBACMemoryStorage implements IRBACStorage {
     return this.storage.del(id);
   }
 
-  public async list(filter: IStorageFilter, cursor?: string) {
+  public async list(filter: RBAC.IStorageFilter, cursor?: string) {
     throw new Error('not implemented');
   }
 
-  private async exists(id: string) {
+  public async exists(id: string) {
     try {
       await this.storage.get(id);
       return true;
