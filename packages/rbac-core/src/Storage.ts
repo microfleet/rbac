@@ -8,7 +8,8 @@ import levelup from 'levelup';
 import { LevelUp } from 'levelup';
 import merge = require('lodash.merge');
 import memdown from 'memdown';
-import { kConflict, kNotFound } from './Errors';
+import semver from 'semver';
+import { kConflict, kNotFound, kVersionLow } from './Errors';
 
 type RBACData = RBAC.IPermission;
 
@@ -38,7 +39,29 @@ class RBACMemoryStorage implements RBAC.IStorage<RBACData> {
 
   public async update(id: string, datum: RBACData) {
     const original = await this.read(id);
-    return this.storage.put(id, merge(original, datum));
+    const update = merge(original, datum);
+
+    await this.storage.put(id, update);
+
+    return update;
+  }
+
+  public async patch(id: string, version: string, datum: RBACData) {
+    let update = datum;
+
+    try {
+      const original = await this.read(id);
+      assert(semver.gte(version, original), kVersionLow);
+      update = merge(original, datum);
+    } catch (e) {
+      if (e !== kNotFound) {
+        throw e;
+      }
+    }
+
+    await this.storage.put(id, update);
+
+    return update;
   }
 
   public async remove(id: string) {

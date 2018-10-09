@@ -2,27 +2,29 @@
  * Contains implementation of a `permission` primitive
  */
 
-import assert = require('assert');
-import semver from 'semver';
+import { Permission } from './models/Permission';
 
-class Permission {
-  public static async register(opts: IMicrofleetPermission, storage: RBAC.IStorage) {
+type PermissionStorage = RBAC.IStorage<Permission>;
 
+class Permissions {
+  private storage: PermissionStorage;
+
+  constructor(storage: PermissionStorage) {
+    this.storage = storage;
   }
 
-  public id: string;
-  public reserved: boolean;
-  public name: string;
-  public deprecated: boolean;
-  public version: string;
+  public async register(params: RBAC.IPermissionRegister) {
+    const permission = Permission.prepare(params);
+    return this.storage.patch(permission.id(), permission.version(), permission);
+  }
 
-  constructor(opts: IMicrofleetPermission) {
-    this.id = opts.id;
-    this.reserved = opts.reserved;
-    this.name = opts.name;
-    this.deprecated = opts.deprecated;
-    this.version = opts.version;
+  public async unregister(id: string) {
+    return this.storage.remove(id);
+  }
+
+  public async list(filter: RBAC.IStorageFilter, cursor?: string) {
+    return this.storage.list(filter, cursor);
   }
 }
 
-export default Permission;
+export default Permissions;

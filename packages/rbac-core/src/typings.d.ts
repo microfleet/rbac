@@ -7,6 +7,15 @@ declare namespace RBAC {
     version: string;
   }
 
+  interface IPermissionRegister {
+    serviceName: string;
+    version: string;
+    name: string;
+    value: string;
+    deprecated: boolean;
+    reserved: boolean;
+  }
+
   interface IStorageFilter {
     prefix?: string;
   }
@@ -17,11 +26,12 @@ declare namespace RBAC {
   }
 
   interface IStorage<T> {
-    read(id: string): Promise<T>;
-    create(id: string, datum: T): Promise<T>;
-    update(id: string, datum: T): Promise<T>;
-    remove(id: string): Promise<void>;
-    list(filter: IStorageFilter, cursor?: string): Promise<IStorageList<T>>;
-    exists(id: string): Promise<boolean>;
+    read(id: string): PromiseLike<T | void>;
+    create(id: string, datum: T): PromiseLike<T | void>;
+    update(id: string, datum: T): PromiseLike<T | void>;
+    patch(id: string, version: string, datum: T): PromiseLike<T | void>;
+    remove(id: string): PromiseLike<void>;
+    list(filter: IStorageFilter, cursor?: string): PromiseLike<IStorageList<T> | void>;
+    exists(id: string): PromiseLike<boolean>;
   }
 }
