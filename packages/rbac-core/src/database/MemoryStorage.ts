@@ -9,7 +9,7 @@ import { LevelUp } from 'levelup';
 import merge = require('lodash.merge');
 import memdown from 'memdown';
 import semver from 'semver';
-import { kConflict, kNotFound, kVersionLow } from './Errors';
+import { kConflict, kNotFound, kVersionLow } from '../Errors';
 
 type RBACData = RBAC.IPermission;
 

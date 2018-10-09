@@ -2,11 +2,11 @@
  * Contains implementation of a `permission` primitive
  */
 
-import { Permission } from './models/Permission';
+import Model from '../models/Permission';
 
-type PermissionStorage = RBAC.IStorage<Permission>;
+type PermissionStorage = RBAC.IStorage<Model>;
 
-class Permissions {
+export class Permission {
   private storage: PermissionStorage;
 
   constructor(storage: PermissionStorage) {
@@ -14,7 +14,7 @@ class Permissions {
   }
 
   public async register(params: RBAC.IPermissionRegister) {
-    const permission = Permission.prepare(params);
+    const permission = Model.prepare(params);
     return this.storage.patch(permission.id(), permission.version(), permission);
   }
 
@@ -27,4 +27,6 @@ class Permissions {
   }
 }
 
-export default Permissions;
+export type PermissionModel = Model;
+
+export default Permission;

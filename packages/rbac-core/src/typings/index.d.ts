@@ -7,6 +7,16 @@ declare namespace RBAC {
     version: string;
   }
 
+  interface IRole {
+    id?: string;
+    name: string;
+    description?: string;
+    permission: Array<IPermission['id']>;
+    meta?: {
+      [key: string]: string | boolean | number,
+    };
+  }
+
   interface IPermissionRegister {
     serviceName: string;
     version: string;

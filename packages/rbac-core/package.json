@@ -10,6 +10,7 @@
   "author": "AVVS <v@makeomatic.ru>",
   "homepage": "https://github.com/microfleet/rbac#readme",
   "license": "MIT",
+  "typings": "lib/typings/index.d.ts",
   "main": "lib/rbac-core.js",
   "directories": {
     "lib": "lib",
@@ -37,6 +38,7 @@
   "dependencies": {
     "common-errors": "^1.0.5",
     "generate-radix-tree": "^1.0.3",
+    "hyperid": "^1.4.1",
     "ms-validation": "^7.2.0",
     "semver": "^5.5.1"
   },
@@ -47,9 +49,9 @@
     "@types/lodash.merge": "^4.6.4",
     "@types/memdown": "^3.0.0",
     "@types/node": "^10.11.4",
-    "lodash.merge": "^4.6.1",
     "encoding-down": "^5.0.4",
     "levelup": "^3.1.1",
+    "lodash.merge": "^4.6.1",
     "memdown": "^3.0.0"
   }
 }
