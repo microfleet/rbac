@@ -5,8 +5,9 @@ import { kNotSemver } from '../Errors';
 export class Permission {
   public static prepare(opts: RBAC.IPermissionRegister, reserved: boolean = false) {
     const params = {
+      actionType: opts.actionType,
       deprecated: opts.deprecated,
-      id: `${opts.serviceName}.${opts.value}`,
+      id: `${opts.serviceName}/${opts.value.replace(/\\./g, '/')}`,
       name: opts.name,
       reserved,
       version: opts.version,

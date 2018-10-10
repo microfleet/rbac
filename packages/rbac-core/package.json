@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "common-errors": "^1.0.5",
-    "generate-radix-tree": "^1.0.3",
+    "find-my-way": "^1.15.4",
     "hyperid": "^1.4.1",
     "ms-validation": "^7.2.0",
     "semver": "^5.5.1"

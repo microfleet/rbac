@@ -1,6 +1,6 @@
 import Model from '../models/Role';
 
-type RoleStorage = RBAC.IStorage<Model>;
+type RoleStorage = RBAC.IStorage<RBAC.IRole>;
 
 export class Role {
   private storage: RoleStorage;
@@ -9,23 +9,24 @@ export class Role {
     this.storage = storage;
   }
 
-  async read(id: string) {
+  public async read(id: string) {
+    const serialized = await this.storage.read(id);
+    return new Model(serialized as RBAC.IRole);
+  }
+
+  public async create(id: string, datum: Model) {
 
   }
 
-  async create(id: string, datum: Model) {
+  public async update(id: string, datum: Model) {
 
   }
 
-  async update(id: string, datum: Model) {
+  public async delete(id: string) {
 
   }
 
-  async delete(id: string) {
-
-  }
-
-  async list(filter: RBAC.IStorageFilter, cursor?: string) {
+  public async list(filter: RBAC.IStorageFilter, cursor?: string) {
 
   }
 }

@@ -28,6 +28,22 @@
       "description": "semver, so that updates are only happening in the >= fashion",
       "pattern": "^0|[1-9]\\d*\\.0|[1-9]\\d*\\.0|[1-9]\\d*$",
       "maxLength": 256
+    },
+    "actionType": {
+      "type": "array",
+      "description": "tag-like action classification",
+      "uniqueItems": true,
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/actionType"
+      }
+    }
+  },
+  "definitions": {
+    "actionType": {
+      "type": "string",
+      "description": "create - POST, read - GET, update - PATCH, delete - DELETE",
+      "enum": ["POST", "GET", "DELETE", "PATCH"]
     }
   }
 }

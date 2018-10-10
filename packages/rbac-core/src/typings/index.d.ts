@@ -1,18 +1,25 @@
+declare module 'find-my-way';
+
 declare namespace RBAC {
+  type ActionType = 'POST' | 'GET' | 'PATCH' | 'DELETE';
+
   interface IPermission {
     id: string;
     reserved: boolean;
     name: string;
     deprecated: boolean;
     version: string;
+    actionType?: ActionType[];
   }
 
   interface IRole {
     id?: string;
     name: string;
     description?: string;
-    permission: Array<IPermission['id']>;
-    meta?: {
+    permissions: {
+      [id: string]: Array<IPermission['actionType']>,
+    };
+    meta: {
       [key: string]: string | boolean | number,
     };
   }
@@ -24,6 +31,7 @@ declare namespace RBAC {
     value: string;
     deprecated: boolean;
     reserved: boolean;
+    actionType?: ActionType[];
   }
 
   interface IStorageFilter {

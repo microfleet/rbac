@@ -1,34 +1,50 @@
-import toRadixTree from 'generate-radix-tree';
+import findMyWay from 'find-my-way';
 import Hyperid from 'hyperid';
 
+const noop = () => {/* do nothing */};
 const instance = Hyperid({ fixedLength: true, urlSafe: true });
+
+interface IPermissionLike {
+  id: RBAC.IPermission['id'];
+  actionType: Array<RBAC.IPermission['actionType']>;
+}
 
 export class Role {
   private opts: RBAC.IRole;
-  private tree: any;
+  private router: any;
 
   constructor(opts: RBAC.IRole) {
     opts.id = opts.id || instance();
-    opts.meta = opts.meta || Object.create(null);
-
     this.opts = opts;
-    this.tree = toRadixTree(opts.permission);
+    this.router = findMyWay();
+
+    for (const [id, actionType] of Object.entries(this.opts.permissions)) {
+      this.addPermission({ id, actionType });
+    }
   }
 
-  public addPermission(id: RBAC.IPermission['id']) {
-    this.opts.permission.push(id);
+  public addPermission(permission: IPermissionLike) {
+    this.router.on(permission.actionType, permission.id, noop);
   }
 
-  public removePermission(id: RBAC.IPermission['id']) {
+  public removePermission(permission: IPermissionLike) {
+    this.router.off(permission.actionType, permission.id);
+  }
 
+  public matchesPermission(id: RBAC.IPermission['id'], method: string = 'GET'): boolean {
+    return this.router.find(method, id) !== null;
   }
 
   public addMeta(key: string, value: string | boolean | number) {
-
+    this.opts.meta[key] = value;
   }
 
   public removeMeta(key: string) {
+    delete this.opts.meta[key];
+  }
 
+  public toJSON(): RBAC.IRole {
+    return Object.assign({}, this.opts);
   }
 }
 
