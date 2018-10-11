@@ -7,7 +7,7 @@ export class Permission {
     const params = {
       actionType: opts.actionType,
       deprecated: opts.deprecated,
-      id: `${opts.serviceName}/${opts.value.replace(/\\./g, '/')}`,
+      id: `${opts.serviceName}/${opts.value.replace(/\./g, '/')}`,
       name: opts.name,
       reserved,
       version: opts.version,

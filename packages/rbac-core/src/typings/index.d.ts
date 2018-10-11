@@ -1,4 +1,5 @@
 declare module 'find-my-way';
+declare module 'level-mem';
 
 declare namespace RBAC {
   type ActionType = 'POST' | 'GET' | 'PATCH' | 'DELETE';
@@ -35,7 +36,12 @@ declare namespace RBAC {
   }
 
   interface IStorageFilter {
-    prefix?: string;
+    gt?: string;
+    gte?: string;
+    lt?: string;
+    lte?: string;
+    reverse?: boolean;
+    limit?: number;
   }
 
   interface IStorageList<T> {
@@ -46,10 +52,11 @@ declare namespace RBAC {
   interface IStorage<T> {
     read(id: string): PromiseLike<T | void>;
     create(id: string, datum: T): PromiseLike<T | void>;
-    update(id: string, datum: T): PromiseLike<T | void>;
-    patch(id: string, version: string, datum: T): PromiseLike<T | void>;
+    update(id: string, datum: any): PromiseLike<T | void>;
+    patch(id: string, datum: any): PromiseLike<T | void>;
     remove(id: string): PromiseLike<void>;
-    list(filter: IStorageFilter, cursor?: string): PromiseLike<IStorageList<T> | void>;
+    list(filter: IStorageFilter): PromiseLike<IStorageList<T> | void>;
     exists(id: string): PromiseLike<boolean>;
+    close(): PromiseLike<void>;
   }
 }

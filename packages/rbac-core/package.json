@@ -44,13 +44,10 @@
   },
   "devDependencies": {
     "@types/common-errors": "^1.0.0",
-    "@types/encoding-down": "^5.0.0",
     "@types/levelup": "^3.1.0",
     "@types/lodash.merge": "^4.6.4",
-    "@types/memdown": "^3.0.0",
     "@types/node": "^10.11.4",
-    "encoding-down": "^5.0.4",
-    "levelup": "^3.1.1",
+    "level-mem": "^3.0.1",
     "lodash.merge": "^4.6.1",
     "memdown": "^3.0.0"
   }

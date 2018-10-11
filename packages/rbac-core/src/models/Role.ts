@@ -1,5 +1,5 @@
-import findMyWay from 'find-my-way';
-import Hyperid from 'hyperid';
+import findMyWay = require('find-my-way');
+import Hyperid = require('hyperid');
 
 const noop = () => {/* do nothing */};
 const instance = Hyperid({ fixedLength: true, urlSafe: true });
@@ -23,6 +23,10 @@ export class Role {
     }
   }
 
+  public id(): string {
+    return this.opts.id as string;
+  }
+
   public addPermission(permission: IPermissionLike) {
     this.router.on(permission.actionType, permission.id, noop);
   }
@@ -32,7 +36,7 @@ export class Role {
   }
 
   public matchesPermission(id: RBAC.IPermission['id'], method: string = 'GET'): boolean {
-    return this.router.find(method, id) !== null;
+    return this.router.find(method, id.replace(/\./g, '/')) !== null;
   }
 
   public addMeta(key: string, value: string | boolean | number) {

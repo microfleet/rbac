@@ -3,21 +3,27 @@
  * It also defines abstract interface, all other storages must conform to it
  */
 import assert = require('assert');
-import encode from 'encoding-down';
-import levelup from 'levelup';
+import mem = require('level-mem');
 import { LevelUp } from 'levelup';
 import merge = require('lodash.merge');
-import memdown from 'memdown';
-import semver from 'semver';
-import { kConflict, kNotFound, kVersionLow } from '../Errors';
+import semver = require('semver');
+import { kConflict, kInvalidFormat, kNotFound, kVersionLow } from '../Errors';
 
-type RBACData = RBAC.IPermission;
+type RBACDataList<T> = RBAC.IStorageList<T>;
+interface IStorageChunk {
+  key: string;
+  value: any;
+}
 
-class RBACMemoryStorage implements RBAC.IStorage<RBACData> {
+class RBACMemoryStorage<T> implements RBAC.IStorage<T> {
   private storage: LevelUp;
 
   constructor() {
-    this.storage = levelup(encode(memdown(), { valueEncoding: 'json' }));
+    this.storage = mem(`rbac:memory:${Date.now()}`, { valueEncoding: 'json' });
+  }
+
+  public async close() {
+    await this.storage.close();
   }
 
   public async read(id: string) {
@@ -32,26 +38,34 @@ class RBACMemoryStorage implements RBAC.IStorage<RBACData> {
     }
   }
 
-  public async create(id: string, datum: RBACData) {
-    assert.equal(await this.exists(id), false, kConflict);
+  public async create(id: string, datum: T) {
+    if (await this.exists(id) === true) {
+      throw kConflict;
+    }
+
     return this.storage.put(id, datum);
   }
 
-  public async update(id: string, datum: RBACData) {
+  public async update(id: string, datum: any) {
+    assert(datum && typeof datum === 'object', kInvalidFormat);
+
     const original = await this.read(id);
     const update = merge(original, datum);
-
     await this.storage.put(id, update);
 
     return update;
   }
 
-  public async patch(id: string, version: string, datum: RBACData) {
+  public async patch(id: string, datum: any) {
+    assert(datum && typeof datum === 'object', kInvalidFormat);
+    assert(semver.valid(datum.version), kInvalidFormat);
     let update = datum;
 
     try {
       const original = await this.read(id);
-      assert(semver.gte(version, original), kVersionLow);
+      if (semver.gte(datum.version, original.version) === false) {
+        throw kVersionLow;
+      }
       update = merge(original, datum);
     } catch (e) {
       if (e !== kNotFound) {
@@ -68,8 +82,29 @@ class RBACMemoryStorage implements RBAC.IStorage<RBACData> {
     return this.storage.del(id);
   }
 
-  public async list(filter: RBAC.IStorageFilter, cursor?: string) {
-    throw new Error('not implemented');
+  public async list(filter: RBAC.IStorageFilter): Promise<RBACDataList<T>> {
+    const {
+      limit = 20,
+    } = filter;
+
+    const response: RBACDataList<T> = {
+      cursor: '',
+      data: [],
+    };
+
+    const stream = this.storage.createReadStream({ limit });
+
+    for await (const chunk of stream) {
+      const { key, value } = chunk as any as IStorageChunk;
+      response.cursor = key;
+      response.data.push(value);
+    }
+
+    if (response.data.length < limit) {
+      response.cursor = '';
+    }
+
+    return response;
   }
 
   public async exists(id: string) {

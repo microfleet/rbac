@@ -13,8 +13,11 @@
     "pretest": "yarn lint",
     "test": "lerna run test",
     "prebuild": "yarn clean",
-    "build": "tsc -b packages/*",
-    "clean": "rimraf packages/**/lib"
+    "build": "tsc -b packages/*/tsconfig.build.json",
+    "clean": "rimraf packages/*/lib"
+  },
+  "resolutions": {
+    "**/level-iterator-stream/readable-stream": "3.x.x"
   },
   "devDependencies": {
     "@makeomatic/deploy": "^8.0.1",

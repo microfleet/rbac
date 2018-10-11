@@ -13,13 +13,10 @@
     "allowSyntheticDefaultImports": true,
     "composite": true
   },
-  "include": [
-    "./src/**/*"
-  ],
   "exclude": [
     "node_modules",
     "lib",
     "dist",
-    "__tests__"
+    "*.test.ts"
   ]
 }
