@@ -11,7 +11,7 @@
   "homepage": "https://github.com/microfleet/rbac#readme",
   "license": "MIT",
   "typings": "lib/typings/index.d.ts",
-  "main": "lib/rbac-core.js",
+  "main": "lib/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"

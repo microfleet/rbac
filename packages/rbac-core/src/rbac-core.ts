@@ -8,6 +8,11 @@ interface ICoreOptions {
   };
 }
 
+export const enum CoreDuties {
+  agent,
+  master,
+}
+
 export class Core {
   public permission: Permission;
   public role: Role;
