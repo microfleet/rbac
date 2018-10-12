@@ -8,14 +8,14 @@ import { LevelUp } from 'levelup';
 import merge = require('lodash.merge');
 import semver = require('semver');
 import { kConflict, kInvalidFormat, kNotFound, kVersionLow } from '../Errors';
+import { IStorage, IStorageFilter, IStorageList } from '../interfaces';
 
-type RBACDataList<T> = RBAC.IStorageList<T>;
 interface IStorageChunk {
   key: string;
   value: any;
 }
 
-class RBACMemoryStorage<T> implements RBAC.IStorage<T> {
+class RBACMemoryStorage<T> implements IStorage<T> {
   private storage: LevelUp;
 
   constructor() {
@@ -82,12 +82,12 @@ class RBACMemoryStorage<T> implements RBAC.IStorage<T> {
     return this.storage.del(id);
   }
 
-  public async list(filter: RBAC.IStorageFilter): Promise<RBACDataList<T>> {
+  public async list(filter: IStorageFilter): Promise<IStorageList<T>> {
     const {
       limit = 20,
     } = filter;
 
-    const response: RBACDataList<T> = {
+    const response: IStorageList<T> = {
       cursor: '',
       data: [],
     };

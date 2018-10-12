@@ -6,7 +6,7 @@
     "microfleet",
     "microservices"
   ],
-  "author": "AVVS <v@makeomatic.ru>",
+  "author": "Vitaly Aminev <v@makeomatic.ca>",
   "homepage": "https://github.com/microfleet/rbac#readme",
   "license": "MIT",
   "main": "lib/rbac.js",
@@ -36,6 +36,7 @@
   "dependencies": {
     "@microfleet/core": "^11.0.1",
     "@microfleet/rbac-core": "^0.0.1",
+    "@microfleet/rbac-storage-redis": "^0.0.1",
     "@microfleet/transport-amqp": "^13.1.2",
     "common-errors": "^1.0.5",
     "ms-validation": "^7.2.0",

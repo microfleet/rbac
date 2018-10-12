@@ -1,7 +1,8 @@
+import { IRole, IStorage, IStorageFilter, IStorageList } from '../interfaces';
 import Model from '../models/Role';
 
-export type RoleModel = RBAC.IRole;
-type RoleStorage = RBAC.IStorage<RoleModel>;
+export type RoleModel = IRole;
+type RoleStorage = IStorage<RoleModel>;
 
 export class Role {
   private storage: RoleStorage;
@@ -30,8 +31,8 @@ export class Role {
     await this.storage.remove(id);
   }
 
-  public async list(filter: RBAC.IStorageFilter) {
-    const datum = await this.storage.list(filter) as RBAC.IStorageList<RoleModel>;
+  public async list(filter: IStorageFilter) {
+    const datum = await this.storage.list(filter) as IStorageList<RoleModel>;
     return {
       cursor: datum.cursor,
       data: datum.data.map((x) => new Model(x)),

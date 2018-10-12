@@ -1,5 +1,6 @@
 import Microfleet = require('@microfleet/core');
-import RBACCore from '@microfleet/rbac-core';
+import RBACCore, { IPermission, IRole } from '@microfleet/rbac-core';
+import RBACStorageRedis from '@microfleet/rbac-storage-redis';
 import merge from 'lodash/merge';
 import conf from './config';
 
@@ -14,7 +15,12 @@ export default class RBACService extends Microfleet {
     super(merge({}, RBACService.defaultOpts, options));
 
     this.addConnector(ConnectorsTypes.migration, () => {
-      this.rbac = new RBACCore({} as any);
+      this.rbac = new RBACCore({
+        storage: {
+          permission: new RBACStorageRedis<IPermission>(this.redis, 'perm'),
+          role: new RBACStorageRedis<IRole>(this.redis, 'role'),
+        },
+      });
     });
   }
 }

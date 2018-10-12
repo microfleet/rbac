@@ -1,7 +1,6 @@
 {
-  "name": "@microfleet/rbac-core",
+  "name": "@microfleet/rbac-agent",
   "version": "0.0.1",
-  "description": "microfleet RBAC core module",
   "keywords": [
     "rbac",
     "microfleet",
@@ -10,8 +9,8 @@
   "author": "Vitaly Aminev <v@makeomatic.ca>",
   "homepage": "https://github.com/microfleet/rbac#readme",
   "license": "MIT",
-  "typings": "lib/index.d.ts",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -36,19 +35,16 @@
     "url": "https://github.com/microfleet/rbac/issues"
   },
   "dependencies": {
-    "common-errors": "^1.0.5",
-    "find-my-way": "^1.15.4",
-    "hyperid": "^1.4.1",
-    "ms-validation": "^7.2.0",
-    "semver": "^5.5.1"
+    "@microfleet/rbac-core": "^0.0.1",
+    "@microfleet/rbac-storage-remote": "^0.0.1"
+  },
+  "peerDependencies": {
+    "@microfleet/core": "^11.0.1"
   },
   "devDependencies": {
     "@types/common-errors": "^1.0.0",
-    "@types/levelup": "^3.1.0",
-    "@types/lodash.merge": "^4.6.4",
     "@types/node": "^10.11.4",
-    "level-mem": "^3.0.1",
-    "lodash.merge": "^4.6.1",
-    "memdown": "^3.0.0"
+    "@types/semver": "^5.5.0",
+    "@microfleet/core": "^11.0.1"
   }
 }

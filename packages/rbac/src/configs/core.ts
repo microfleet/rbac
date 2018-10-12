@@ -16,6 +16,7 @@ exports.plugins = [
   'logger',
   'router',
   'amqp',
+  'redisSentinel',
 ];
 
 /**

@@ -1,19 +1,20 @@
 import findMyWay = require('find-my-way');
 import Hyperid = require('hyperid');
+import { IPermission, IRole } from '../interfaces';
 
 const noop = () => {/* do nothing */};
 const instance = Hyperid({ fixedLength: true, urlSafe: true });
 
 interface IPermissionLike {
-  id: RBAC.IPermission['id'];
-  actionType: Array<RBAC.IPermission['actionType']>;
+  id: IPermission['id'];
+  actionType: Array<IPermission['actionType']>;
 }
 
 export class Role {
-  private opts: RBAC.IRole;
+  private opts: IRole;
   private router: any;
 
-  constructor(opts: RBAC.IRole) {
+  constructor(opts: IRole) {
     opts.id = opts.id || instance();
     this.opts = opts;
     this.router = findMyWay();
@@ -35,7 +36,7 @@ export class Role {
     this.router.off(permission.actionType, permission.id);
   }
 
-  public matchesPermission(id: RBAC.IPermission['id'], method: string = 'GET'): boolean {
+  public matchesPermission(id: IPermission['id'], method: string = 'GET'): boolean {
     return this.router.find(method, id.replace(/\./g, '/')) !== null;
   }
 
@@ -47,7 +48,7 @@ export class Role {
     delete this.opts.meta[key];
   }
 
-  public toJSON(): RBAC.IRole {
+  public toJSON(): IRole {
     return Object.assign({}, this.opts);
   }
 }

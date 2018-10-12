@@ -1,9 +1,10 @@
 import assert = require('assert');
 import semver from 'semver';
 import { kNotSemver } from '../Errors';
+import { IPermission, IPermissionRegister, RBACActionType } from '../interfaces';
 
 export class Permission {
-  public static prepare(opts: RBAC.IPermissionRegister, reserved: boolean = false) {
+  public static prepare(opts: IPermissionRegister, reserved: boolean = false) {
     const params = {
       actionType: opts.actionType || [...Permission.ActionTypes],
       deprecated: opts.deprecated,
@@ -16,10 +17,10 @@ export class Permission {
     return new Permission(params);
   }
 
-  private static ActionTypes: RBAC.ActionType[] = ['GET', 'POST', 'PATCH', 'DELETE'];
-  private opts: RBAC.IPermission;
+  private static ActionTypes: RBACActionType[] = ['GET', 'POST', 'PATCH', 'DELETE'];
+  private opts: IPermission;
 
-  constructor(opts: RBAC.IPermission) {
+  constructor(opts: IPermission) {
     assert(semver.valid(opts.version), kNotSemver);
     this.opts = opts;
   }
@@ -32,11 +33,11 @@ export class Permission {
     return this.opts.version;
   }
 
-  public verbs(): RBAC.ActionType[] {
+  public verbs(): RBACActionType[] {
     return this.opts.actionType || [...Permission.ActionTypes];
   }
 
-  public toJSON(): RBAC.IPermission {
+  public toJSON(): IPermission {
     return Object.assign({}, this.opts);
   }
 }

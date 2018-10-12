@@ -1,16 +1,12 @@
 import { Permission, PermissionModel } from './api/Permission';
 import { Role, RoleModel } from './api/Role';
+import { IStorage } from './interfaces';
 
 interface ICoreOptions {
   storage: {
-    permission: RBAC.IStorage<PermissionModel>,
-    role: RBAC.IStorage<RoleModel>,
+    permission: IStorage<PermissionModel>,
+    role: IStorage<RoleModel>,
   };
-}
-
-export const enum CoreDuties {
-  agent,
-  master,
 }
 
 export class Core {

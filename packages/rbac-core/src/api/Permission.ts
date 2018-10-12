@@ -1,11 +1,11 @@
 /**
  * Contains implementation of a `permission` primitive
  */
-
+import { IPermission, IPermissionRegister, IStorage, IStorageFilter, IStorageList } from '../interfaces';
 import Model from '../models/Permission';
 
-export type PermissionModel = RBAC.IPermission;
-type PermissionStorage = RBAC.IStorage<PermissionModel>;
+export type PermissionModel = IPermission;
+type PermissionStorage = IStorage<PermissionModel>;
 
 export class Permission {
   private storage: PermissionStorage;
@@ -19,7 +19,7 @@ export class Permission {
     return new Model(datum as PermissionModel);
   }
 
-  public async register(params: RBAC.IPermissionRegister) {
+  public async register(params: IPermissionRegister) {
     const permission = Model.prepare(params);
     return this.storage.patch(permission.id(), permission.toJSON());
   }
@@ -28,8 +28,8 @@ export class Permission {
     return this.storage.remove(id);
   }
 
-  public async list(filter: RBAC.IStorageFilter) {
-    const datum = await this.storage.list(filter) as RBAC.IStorageList<PermissionModel>;
+  public async list(filter: IStorageFilter) {
+    const datum = await this.storage.list(filter) as IStorageList<PermissionModel>;
     return {
       cursor: datum.cursor,
       data: datum.data.map((x) => new Model(x)),

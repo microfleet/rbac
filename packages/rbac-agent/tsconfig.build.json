@@ -9,6 +9,6 @@
   ],
   "references": [
     { "path": "../rbac-core/tsconfig.build.json" },
-    { "path": "../rbac-storage-redis/tsconfig.build.json" }
+    { "path": "../rbac-storage-remote/tsconfig.build.json" }
   ]
 }
