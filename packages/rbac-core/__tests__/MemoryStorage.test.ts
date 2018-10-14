@@ -1,9 +1,10 @@
 import MemoryStorage from '../src/database/MemoryStorage';
 import { kConflict, kInvalidFormat, kNotFound, kVersionLow } from '../src/Errors';
+import { IPermission } from '../src/interfaces';
 
-let storage: MemoryStorage<RBAC.IPermission>;
+let storage: MemoryStorage<IPermission>;
 
-const permissionSample: RBAC.IPermission = {
+const permissionSample: IPermission = {
   actionType: ['GET', 'POST', 'PATCH', 'DELETE'],
   deprecated: false,
   id: 'sample',

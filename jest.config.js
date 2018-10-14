@@ -7,12 +7,12 @@ module.exports = {
     'js'
   ],
   moduleNameMapper: {
-    '@microfleet/(.*)': '<rootDir>/packages/$1'
+    '@microfleet/((?:iap|rbac).*)': '<rootDir>/packages/$1/src'
   },
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest'
   },
-  testMatch: [
-    '**/*.test.(ts|tsx)'
+  projects: [
+    "<rootDir>/packages/*/__tests__/**/*.test.(ts|tsx)"
   ]
 };

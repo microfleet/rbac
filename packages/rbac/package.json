@@ -27,14 +27,13 @@
     "url": "git+https://github.com/microfleet/rbac.git"
   },
   "scripts": {
-    "test": "jest --config ../../jest.config.js",
-    "lint": "tslint -c ../../tslint.json .src/**/*.ts"
+    "lint": "tslint -c ../../tslint.json ./src/**/*.ts"
   },
   "bugs": {
     "url": "https://github.com/microfleet/rbac/issues"
   },
   "dependencies": {
-    "@microfleet/core": "^11.0.1",
+    "@microfleet/core": "^11.0.2",
     "@microfleet/rbac-core": "^0.0.1",
     "@microfleet/rbac-storage-redis": "^0.0.1",
     "@microfleet/transport-amqp": "^13.1.2",
@@ -44,7 +43,7 @@
   },
   "devDependencies": {
     "@types/common-errors": "^1.0.0",
-    "@types/node": "^10.11.4",
+    "@types/node": "^10.11.7",
     "@types/semver": "^5.5.0"
   }
 }
