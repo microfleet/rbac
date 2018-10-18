@@ -1,6 +1,8 @@
-import conf from 'ms-conf';
-import path from 'path';
+import conf = require('ms-conf')
+import path = require('path')
 
-conf.prependDefaultConfiguration(path.resolve(__dirname, './configs'));
+conf.prependDefaultConfiguration(path.resolve(__dirname, './configs'))
 
-export = conf;
+process.env.NCONF_NAMESPACE = process.env.NCONF_NAMESPACE || 'RBAC'
+
+export default conf

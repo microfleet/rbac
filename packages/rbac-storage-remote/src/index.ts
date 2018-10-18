@@ -1,1 +1,1 @@
-export { RemoteStorage as default } from './storage';
+export { RemoteStorage as default } from './storage'

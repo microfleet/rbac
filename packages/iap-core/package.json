@@ -28,7 +28,7 @@
     "url": "git+https://github.com/microfleet/rbac.git"
   },
   "scripts": {
-    "lint": "tslint -c ../../tslint.json ./src/**/*.ts"
+    "lint": "tslint './src/**/*.ts' -c ../../tslint.json --project ./tsconfig.json"
   },
   "bugs": {
     "url": "https://github.com/microfleet/rbac/issues"
@@ -42,7 +42,7 @@
     "@types/bluebird": "^3.5.24",
     "@types/get-value": "^3.0.0",
     "@types/jsonwebtoken": "^7.2.8",
-    "@types/node": "^10.11.7",
+    "@types/node": "^10.12.0",
     "key-fingerprint": "^1.1.0"
   }
 }

@@ -29,7 +29,7 @@
     "url": "git+https://github.com/microfleet/rbac.git"
   },
   "scripts": {
-    "lint": "tslint -c ../../tslint.json ./src/**/*.ts"
+    "lint": "tslint './src/**/*.ts' -c ../../tslint.json --project ./tsconfig.json"
   },
   "bugs": {
     "url": "https://github.com/microfleet/rbac/issues"
@@ -45,7 +45,7 @@
     "@types/common-errors": "^1.0.0",
     "@types/levelup": "^3.1.0",
     "@types/lodash.merge": "^4.6.4",
-    "@types/node": "^10.11.7",
+    "@types/node": "^10.12.0",
     "level-mem": "^3.0.1",
     "lodash.merge": "^4.6.1",
     "memdown": "^3.0.0"

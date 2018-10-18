@@ -28,7 +28,7 @@
     "url": "git+https://github.com/microfleet/rbac.git"
   },
   "scripts": {
-    "lint": "tslint -c ../../tslint.json ./src/**/*.ts"
+    "lint": "tslint './src/**/*.ts' -c ../../tslint.json --project ./tsconfig.json"
   },
   "bugs": {
     "url": "https://github.com/microfleet/rbac/issues"
@@ -38,12 +38,12 @@
     "@microfleet/rbac-storage-remote": "^0.0.1"
   },
   "peerDependencies": {
-    "@microfleet/core": "^11.0.1"
+    "@microfleet/core": "next"
   },
   "devDependencies": {
-    "@microfleet/core": "^11.0.2",
+    "@microfleet/core": "next",
     "@types/common-errors": "^1.0.0",
-    "@types/node": "^10.11.7",
+    "@types/node": "^10.12.0",
     "@types/semver": "^5.5.0"
   }
 }
