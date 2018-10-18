@@ -1,6 +1,6 @@
 export type RBACActionType = 'POST' | 'GET' | 'PATCH' | 'DELETE'
 
-export interface PermissionModel {
+export interface TPermission {
   id: string
   reserved: boolean
   name: string
@@ -9,12 +9,12 @@ export interface PermissionModel {
   actionType?: RBACActionType[]
 }
 
-export interface RoleModel {
+export interface TRole {
   id?: string
   name: string
   description?: string
   permissions: {
-    [id: string]: PermissionModel['actionType'][]
+    [id: string]: TPermission['actionType'][]
   }
   meta: {
     [key: string]: string | boolean | number,
@@ -42,12 +42,16 @@ export interface StorageList<T> {
   data: T[]
 }
 
+export interface StorageCtor<T> {
+  new (dbAdapter: any, db: string): Storage<T>
+}
+
 export interface Storage<T> {
-  read(id: string): PromiseLike<T | void>
-  create(id: string, datum: T): PromiseLike<T | void>
-  update(id: string, datum: any): PromiseLike<T | void>
-  patch(id: string, datum: any): PromiseLike<T | void>
+  read(id: string): PromiseLike<T>
+  create(id: string, datum: T): PromiseLike<T>
+  update(id: string, datum: any): PromiseLike<T>
+  patch(id: string, datum: any): PromiseLike<T>
   remove(id: string): PromiseLike<void>
-  list(filter: StorageFilter): PromiseLike<StorageList<T> | void>
+  list(filter: StorageFilter): PromiseLike<StorageList<T>>
   exists(id: string): PromiseLike<boolean>
 }

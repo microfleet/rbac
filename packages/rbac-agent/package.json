@@ -35,7 +35,8 @@
   },
   "dependencies": {
     "@microfleet/rbac-core": "^0.0.1",
-    "@microfleet/rbac-storage-remote": "^0.0.1"
+    "@microfleet/rbac-storage-remote": "^0.0.1",
+    "read-pkg-up": "^4.0.0"
   },
   "peerDependencies": {
     "@microfleet/core": "next"
@@ -44,6 +45,7 @@
     "@microfleet/core": "next",
     "@types/common-errors": "^1.0.0",
     "@types/node": "^10.12.0",
+    "@types/read-pkg-up": "^3.0.1",
     "@types/semver": "^5.5.0"
   }
 }

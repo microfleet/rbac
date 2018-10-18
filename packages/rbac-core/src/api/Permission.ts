@@ -1,11 +1,11 @@
 /**
  * Contains implementation of a `permission` primitive
  */
-import { PermissionModel, PermissionRegister, Storage, StorageFilter, StorageList } from '../interfaces'
-import Model from '../models/Permission'
+import { TPermission, PermissionRegister, Storage, StorageFilter, StorageList } from '../interfaces'
+import PermissionModel from '../models/Permission'
 
-export { PermissionModel }
-export type PermissionStorage = Storage<PermissionModel>
+export { PermissionModel, TPermission }
+export type PermissionStorage = Storage<TPermission>
 
 export class Permission {
   private storage: PermissionStorage
@@ -14,25 +14,25 @@ export class Permission {
     this.storage = storage
   }
 
-  public async read(id: PermissionModel['id']) {
+  public async read(id: TPermission['id']) {
     const datum = await this.storage.read(id)
-    return new Model(datum as PermissionModel)
+    return new PermissionModel(datum as TPermission)
   }
 
   public async register(params: PermissionRegister) {
-    const permission = Model.prepare(params)
+    const permission = PermissionModel.prepare(params)
     return this.storage.patch(permission.id(), permission.toJSON())
   }
 
-  public async unregister(id: PermissionModel['id']) {
+  public async unregister(id: TPermission['id']) {
     return this.storage.remove(id)
   }
 
   public async list(filter: StorageFilter) {
-    const datum = await this.storage.list(filter) as StorageList<PermissionModel>
+    const datum = await this.storage.list(filter) as StorageList<TPermission>
     return {
       cursor: datum.cursor,
-      data: datum.data.map(x => new Model(x)),
+      data: datum.data.map(x => new PermissionModel(x)),
     }
   }
 }

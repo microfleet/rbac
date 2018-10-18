@@ -1,1 +1,1 @@
-export { RedisStorage as default } from './storage'
+export { RedisStorage, RedisStorage as default } from './storage'

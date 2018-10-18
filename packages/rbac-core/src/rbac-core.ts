@@ -1,15 +1,18 @@
-import { Permission, PermissionModel } from './api/Permission'
-import { Role, RoleModel } from './api/Role'
+import { Permission, TPermission, PermissionModel } from './api/Permission'
+import { Role, TRole, RoleModel } from './api/Role'
 import { Storage } from './interfaces'
+
+export { RoleModel, PermissionModel }
+export { TRole, TPermission }
 
 interface CoreOptions {
   storage: {
-    permission: Storage<PermissionModel>,
-    role: Storage<RoleModel>,
+    permission: Storage<TPermission>,
+    role: Storage<TRole>,
   }
 }
 
-export class Core {
+export class RBACCore {
   public permission: Permission
   public role: Role
 
@@ -19,4 +22,4 @@ export class Core {
   }
 }
 
-export default Core
+export default RBACCore

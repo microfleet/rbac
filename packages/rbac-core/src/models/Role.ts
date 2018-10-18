@@ -1,20 +1,20 @@
 import findMyWay = require('find-my-way')
 import Hyperid = require('hyperid')
-import { PermissionModel, RoleModel } from '../interfaces'
+import { TPermission, TRole } from '../interfaces'
 
 const noop = () => {/* do nothing */}
 const instance = Hyperid({ fixedLength: true, urlSafe: true })
 
 interface PermissionLike {
-  id: PermissionModel['id']
-  actionType: PermissionModel['actionType'][]
+  id: TPermission['id']
+  actionType: TPermission['actionType'][]
 }
 
 export class Role {
-  private opts: RoleModel
+  private opts: TRole
   private router: any
 
-  constructor(opts: RoleModel) {
+  constructor(opts: TRole) {
     opts.id = opts.id || instance()
     this.opts = opts
     this.router = findMyWay()
@@ -36,7 +36,7 @@ export class Role {
     this.router.off(permission.actionType, permission.id)
   }
 
-  public matchesPermission(id: PermissionModel['id'], method: string = 'GET'): boolean {
+  public matchesPermission(id: TPermission['id'], method: string = 'GET'): boolean {
     return this.router.find(method, id.replace(/\./g, '/')) !== null
   }
 
@@ -48,7 +48,7 @@ export class Role {
     delete this.opts.meta[key]
   }
 
-  public toJSON(): RoleModel {
+  public toJSON(): TRole {
     return Object.assign({}, this.opts)
   }
 }

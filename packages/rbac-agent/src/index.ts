@@ -1,1 +1,1 @@
-export { RBACAgent as default } from './rbac-agent'
+export * from './rbac-agent'

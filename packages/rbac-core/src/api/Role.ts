@@ -1,8 +1,8 @@
-import { RoleModel, Storage, StorageFilter, StorageList } from '../interfaces'
-import Model from '../models/Role'
+import { TRole, Storage, StorageFilter, StorageList } from '../interfaces'
+import RoleModel from '../models/Role'
 
-export { RoleModel }
-export type RoleStorage = Storage<RoleModel>
+export { RoleModel, TRole }
+export type RoleStorage = Storage<TRole>
 
 export class Role {
   private storage: RoleStorage
@@ -13,18 +13,18 @@ export class Role {
 
   public async read(id: string) {
     const serialized = await this.storage.read(id)
-    return new Model(serialized as RoleModel)
+    return new RoleModel(serialized as TRole)
   }
 
-  public async create(datum: RoleModel) {
-    const role = new Model(datum)
+  public async create(datum: TRole) {
+    const role = new RoleModel(datum)
     await this.storage.create(role.id(), role.toJSON())
     return role
   }
 
-  public async update(id: string, datum: RoleModel) {
+  public async update(id: string, datum: TRole) {
     const serialized = await this.storage.update(id, datum)
-    return new Model(serialized as RoleModel)
+    return new RoleModel(serialized as TRole)
   }
 
   public async remove(id: string) {
@@ -32,10 +32,10 @@ export class Role {
   }
 
   public async list(filter: StorageFilter) {
-    const datum = await this.storage.list(filter) as StorageList<RoleModel>
+    const datum = await this.storage.list(filter) as StorageList<TRole>
     return {
       cursor: datum.cursor,
-      data: datum.data.map(x => new Model(x)),
+      data: datum.data.map(x => new RoleModel(x)),
     }
   }
 }

@@ -1,7 +1,7 @@
 import assert = require('assert')
 import semver from 'semver'
 import { kNotSemver } from '../Errors'
-import { PermissionModel, PermissionRegister, RBACActionType } from '../interfaces'
+import { TPermission, PermissionRegister, RBACActionType } from '../interfaces'
 
 export class Permission {
   public static prepare(opts: PermissionRegister, reserved: boolean = false) {
@@ -18,9 +18,9 @@ export class Permission {
   }
 
   private static ActionTypes: RBACActionType[] = ['GET', 'POST', 'PATCH', 'DELETE']
-  private opts: PermissionModel
+  private opts: TPermission
 
-  constructor(opts: PermissionModel) {
+  constructor(opts: TPermission) {
     assert(semver.valid(opts.version), kNotSemver)
     this.opts = opts
   }
@@ -37,7 +37,7 @@ export class Permission {
     return this.opts.actionType || [...Permission.ActionTypes]
   }
 
-  public toJSON(): PermissionModel {
+  public toJSON(): TPermission {
     return Object.assign({}, this.opts)
   }
 }
