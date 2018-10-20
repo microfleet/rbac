@@ -1,4 +1,4 @@
-import { Microfleet, ConnectorsTypes, TConnectorsTypes } from '@microfleet/core'
+import { Microfleet } from '@microfleet/core'
 import { RBACCore, TPermission, TRole, Storage } from '@microfleet/rbac-core'
 import { RBACAgent } from '@microfleet/rbac-agent'
 import { NotImplementedError } from 'common-errors'
@@ -35,10 +35,6 @@ export default class RBACService extends Microfleet {
     'router',
   ]
 
-  /**
-   * Redis Sentinel Connector
-   */
-  private redis?: Redis
   private agent?: RBACAgent
   private storage?: {
     permission: Storage<TPermission>

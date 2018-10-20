@@ -48,7 +48,7 @@ export interface StorageCtor<T> {
 
 export interface Storage<T> {
   read(id: string): PromiseLike<T>
-  create(id: string, datum: T): PromiseLike<T>
+  create(id: string, datum: T): PromiseLike<T | void>
   update(id: string, datum: any): PromiseLike<T>
   patch(id: string, datum: any): PromiseLike<T>
   remove(id: string): PromiseLike<void>

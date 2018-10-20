@@ -1,1 +1,1 @@
-declare module 'ms-conf';
+declare module 'ms-conf'

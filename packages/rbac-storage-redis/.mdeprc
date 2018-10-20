@@ -1,0 +1,19 @@
+{
+  "node": "10.12.0",
+  "nycCoverage": false,
+  "coverage": false,
+  "test_framework": "jest -c ../../jest.config.js --coverageDirectory <coverageDirectory>",
+  "tests": "__tests__/*.test.ts",
+  "auto_compose": true,
+  "services": [
+    "redisSentinel"
+  ],
+  "extras": {
+    "tester": {
+      "working_dir": "/src/packages/rbac-storage-redis",
+      "volumes": [
+        "${PWD}/../../:/src"
+      ]
+    }
+  }
+}

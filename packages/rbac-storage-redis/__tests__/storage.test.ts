@@ -1,8 +1,9 @@
-import MemoryStorage from '../src/database/MemoryStorage'
-import { kConflict, kInvalidFormat, kNotFound, kVersionLow } from '../src/Errors'
-import { TPermission } from '../src/interfaces'
+import Redis = require('ioredis')
+import { RedisStorage } from '../src'
+import { TPermission, Errors } from '@microfleet/rbac-core'
 
-let storage: MemoryStorage<TPermission>
+const { kConflict, kInvalidFormat, kNotFound, kVersionLow } = Errors
+let storage: RedisStorage<TPermission>
 
 const permissionSample: TPermission = {
   actionType: ['GET', 'POST', 'PATCH', 'DELETE'],
@@ -13,13 +14,31 @@ const permissionSample: TPermission = {
   version: '1.0.0',
 }
 
+const redis = new Redis({
+  sentinels: [{
+    host: 'redis-sentinel',
+    port: 26379,
+  }],
+  keyPrefix: 'rbr!',
+  name: 'mservice',
+  lazyConnect: true,
+})
+
+beforeAll(async () => {
+  await redis.connect()
+})
+
 beforeEach(async () => {
-  storage = new MemoryStorage()
+  storage = new RedisStorage(redis, 'perm')
   await storage.create(permissionSample.id, permissionSample)
 })
 
 afterEach(async () => {
-  await storage.close()
+  await redis.flushdb()
+})
+
+afterAll(async () => {
+  await redis.quit()
 })
 
 describe('exists+read+create', () => {
@@ -53,7 +72,7 @@ describe('exists+read+create', () => {
   test('creating new value succeeds', async () => {
     expect.assertions(1)
     await expect(storage.create('new-id', permissionSample))
-      .resolves.toBeUndefined()
+      .resolves.toEqual(permissionSample)
   })
 })
 
@@ -126,7 +145,7 @@ describe('list', () => {
   test('returns 1 item thats in the storage', async () => {
     expect.assertions(1)
     await expect(storage.list({})).resolves.toEqual({
-      cursor: '',
+      cursor: '0',
       data: [permissionSample],
     })
   })

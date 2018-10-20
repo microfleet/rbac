@@ -13,6 +13,9 @@ export class RedisStorage<T> implements Storage<T> {
   private readonly index: string
 
   constructor(redis: Redis, db: string) {
+    assert(redis, '"redis" connector must be defined')
+    assert(db, '"db" name must be defined')
+
     this.storage = redis
     this.db = db
     this.index = this.key('s')
@@ -51,6 +54,12 @@ export class RedisStorage<T> implements Storage<T> {
   public async update(id: string, datum: any) {
     assert(datum && typeof datum === 'object', Errors.kInvalidFormat)
     const key = this.hash(id)
+
+    // NOTE: lua would be faster
+    // must exist before the update
+    if (await this.exists(id) !== true) {
+      throw Errors.kNotFound
+    }
 
     // updated datum
     const [, [err, response]] = await this.storage.pipeline()

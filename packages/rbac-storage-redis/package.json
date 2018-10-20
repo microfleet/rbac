@@ -29,15 +29,15 @@
     "url": "git+https://github.com/microfleet/rbac.git"
   },
   "scripts": {
-    "lint": "tslint './src/**/*.ts' -c ../../tslint.json --project ./tsconfig.json"
+    "lint": "tslint './src/**/*.ts' -c ../../tslint.json --project ./tsconfig.json",
+    "test": "mdep test run"
   },
   "bugs": {
     "url": "https://github.com/microfleet/rbac/issues"
   },
   "dependencies": {
     "@microfleet/rbac-core": "^0.0.1",
-    "common-errors": "^1.0.5",
-    "fast-json-stringify": "^1.9.1"
+    "common-errors": "^1.0.5"
   },
   "devDependencies": {
     "@types/common-errors": "^1.0.0",

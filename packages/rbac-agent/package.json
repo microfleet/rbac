@@ -28,7 +28,8 @@
     "url": "git+https://github.com/microfleet/rbac.git"
   },
   "scripts": {
-    "lint": "tslint './src/**/*.ts' -c ../../tslint.json --project ./tsconfig.json"
+    "lint": "tslint './src/**/*.ts' -c ../../tslint.json --project ./tsconfig.json",
+    "test": "jest -c ../../jest.config.js ./__tests__/*.test.ts"
   },
   "bugs": {
     "url": "https://github.com/microfleet/rbac/issues"
