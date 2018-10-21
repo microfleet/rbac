@@ -104,7 +104,7 @@ export class RedisStorage<T> implements Storage<T> {
     ])
   }
 
-  public async list(filter: StorageFilter): Promise<StorageList<T>> {
+  public async list(filter: StorageFilter = {}): Promise<StorageList<T>> {
     const { prefix } = filter
 
     const response: StorageList<T> = {

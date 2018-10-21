@@ -87,7 +87,7 @@ export class RBACMemoryStorage<T> implements Storage<T> {
     return this.storage.del(id)
   }
 
-  public async list(filter: StorageFilter): Promise<StorageList<T>> {
+  public async list(filter: StorageFilter = {}): Promise<StorageList<T>> {
     const {
       limit = 20,
     } = filter

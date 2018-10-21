@@ -31,7 +31,7 @@ export class Role {
     await this.storage.remove(id)
   }
 
-  public async list(filter: StorageFilter) {
+  public async list(filter: StorageFilter = {}) {
     const datum = await this.storage.list(filter) as StorageList<TRole>
     return {
       cursor: datum.cursor,

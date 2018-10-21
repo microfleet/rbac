@@ -28,8 +28,9 @@ export class Permission {
     return this.storage.remove(id)
   }
 
-  public async list(filter: StorageFilter) {
+  public async list(filter: StorageFilter = {}) {
     const datum = await this.storage.list(filter) as StorageList<TPermission>
+
     return {
       cursor: datum.cursor,
       data: datum.data.map(x => new PermissionModel(x)),

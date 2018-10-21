@@ -26,8 +26,8 @@ export interface PermissionRegister {
   version: string
   name: string
   value: string
-  deprecated: boolean
-  reserved: boolean
+  deprecated?: boolean
+  reserved?: boolean
   actionType?: RBACActionType[]
 }
 

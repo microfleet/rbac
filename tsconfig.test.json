@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "target": "es6",
-    "resolveJsonModule": true
+    "target": "es6"
   }
 }

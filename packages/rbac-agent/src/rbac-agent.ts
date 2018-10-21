@@ -4,18 +4,19 @@ import { NotSupportedError } from 'common-errors'
 import * as M from '@microfleet/core'
 import * as R from '@microfleet/rbac-core'
 import { RemoteStorage } from '@microfleet/rbac-storage-remote'
+import { DeepPartial } from 'ts-essentials'
 import readPkgUp = require('read-pkg-up')
 import get = require('get-value')
 
 export interface RBACActionConfig {
   id?: string
   actionName?: string
+  deprecated?: boolean
   name: string
-  deprecated: boolean
   actionType: R.RBACActionType[]
 }
 
-export type RBACServiceAction = M.ServiceAction & {
+export type RBACServiceAction = DeepPartial<M.ServiceAction> & {
   rbac?: RBACActionConfig
 }
 
@@ -85,7 +86,7 @@ export class RBACAgent {
   /**
    * RBAC service adapter
    */
-  private readonly rbac: R.RBACCore
+  public readonly rbac: R.RBACCore
 
   /**
    * Actions are pulled from the router to
@@ -214,7 +215,7 @@ export class RBACAgent {
       serviceName: this.name,
       version: this.version,
       name: rbac.name,
-      value: rbac.actionName || action.actionName,
+      value: rbac.actionName || action.actionName as string,
       deprecated: rbac.deprecated,
       actionType: rbac.actionType,
       reserved: false,

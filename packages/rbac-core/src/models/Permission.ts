@@ -1,5 +1,5 @@
 import assert = require('assert')
-import semver from 'semver'
+import semver = require('semver')
 import { kNotSemver } from '../Errors'
 import { TPermission, PermissionRegister, RBACActionType } from '../interfaces'
 
@@ -8,7 +8,7 @@ export class Permission {
     const params = {
       reserved,
       actionType: opts.actionType || [...Permission.ActionTypes],
-      deprecated: opts.deprecated,
+      deprecated: opts.deprecated || false,
       id: `${opts.serviceName}/${opts.value.replace(/\./g, '/')}`,
       name: opts.name,
       version: opts.version,

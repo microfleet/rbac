@@ -39,7 +39,7 @@ export class RemoteStorage<T> implements Storage<T> {
       .publishAndWait(this.route('remove'), { id })
   }
 
-  public async list(filter: StorageFilter): Promise<StorageList<T>> {
+  public async list(filter: StorageFilter = {}): Promise<StorageList<T>> {
     return this.remote
       .publishAndWait(this.route('list'), { filter })
   }
