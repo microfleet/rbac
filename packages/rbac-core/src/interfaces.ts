@@ -42,15 +42,15 @@ export interface StorageList<T> {
   data: T[]
 }
 
-export interface StorageCtor<T> {
-  new (dbAdapter: any, db: string): Storage<T>
+export interface StorageConstructor {
+  new <T>(dbAdapter: any, db: string): Storage<T>
 }
 
 export interface Storage<T> {
   read(id: string): PromiseLike<T>
-  create(id: string, datum: T): PromiseLike<T | void>
-  update(id: string, datum: any): PromiseLike<T>
-  patch(id: string, datum: any): PromiseLike<T>
+  create(id: string, datum: T): PromiseLike<T>
+  update(id: string, datum: Partial<T>): PromiseLike<T>
+  patch(id: string, datum: Partial<T>): PromiseLike<T>
   remove(id: string): PromiseLike<void>
   list(filter: StorageFilter): PromiseLike<StorageList<T>>
   exists(id: string): PromiseLike<boolean>

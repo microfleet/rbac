@@ -1,9 +1,7 @@
-import MemoryStorage from '../src/database/MemoryStorage'
-import { kConflict, kInvalidFormat, kNotFound, kVersionLow } from '../src/Errors'
-import { TPermission } from '../src/interfaces'
+import { RBACMemoryStorage, TPermission, Errors } from '../src'
 
-let storage: MemoryStorage<TPermission>
-
+let storage: RBACMemoryStorage<TPermission>
+const { kConflict, kInvalidFormat, kNotFound, kVersionLow } = Errors
 const permissionSample: TPermission = {
   actionType: ['GET', 'POST', 'PATCH', 'DELETE'],
   deprecated: false,
@@ -14,7 +12,7 @@ const permissionSample: TPermission = {
 }
 
 beforeEach(async () => {
-  storage = new MemoryStorage()
+  storage = new RBACMemoryStorage()
   await storage.create(permissionSample.id, permissionSample)
 })
 
@@ -53,7 +51,7 @@ describe('exists+read+create', () => {
   test('creating new value succeeds', async () => {
     expect.assertions(1)
     await expect(storage.create('new-id', permissionSample))
-      .resolves.toBeUndefined()
+      .resolves.toBe(permissionSample)
   })
 })
 

@@ -2,23 +2,27 @@
  * This file contains memory storage for development of rbac
  * It also defines abstract interface, all other storages must conform to it
  */
+
 import assert = require('assert')
-import mem = require('level-mem')
-import { LevelUp } from 'levelup'
-import merge = require('lodash.merge')
 import semver = require('semver')
 import { kConflict, kInvalidFormat, kNotFound, kVersionLow } from '../Errors'
 import { Storage, StorageFilter, StorageList } from '../interfaces'
+import { LevelUp } from 'levelup'
+import S2A from './stream-to-async'
 
 export interface StorageChunk {
   key: string
   value: any
 }
 
-class RBACMemoryStorage<T> implements Storage<T> {
-  private storage: LevelUp
+export class RBACMemoryStorage<T> implements Storage<T> {
+  private readonly storage: LevelUp
+  private readonly merge: (...args: Partial<T>[]) => T
 
   constructor() {
+    const mem = require('level-mem')
+
+    this.merge = require('lodash.merge')
     this.storage = mem(`rbac:memory:${Date.now()}`, { valueEncoding: 'json' })
   }
 
@@ -43,14 +47,15 @@ class RBACMemoryStorage<T> implements Storage<T> {
       throw kConflict
     }
 
-    return this.storage.put(id, datum)
+    await this.storage.put(id, datum)
+    return datum
   }
 
   public async update(id: string, datum: any) {
     assert(datum && typeof datum === 'object', kInvalidFormat)
 
     const original = await this.read(id)
-    const update = merge(original, datum)
+    const update = this.merge(original, datum)
     await this.storage.put(id, update)
 
     return update
@@ -66,7 +71,7 @@ class RBACMemoryStorage<T> implements Storage<T> {
       if (!semver.gte(datum.version, original.version)) {
         throw kVersionLow
       }
-      update = merge(original, datum)
+      update = this.merge(original, datum)
     } catch (e) {
       if (e !== kNotFound) {
         throw e
@@ -94,7 +99,7 @@ class RBACMemoryStorage<T> implements Storage<T> {
 
     const stream = this.storage.createReadStream({ limit })
 
-    for await (const chunk of stream) {
+    for await (const chunk of new S2A(stream)) {
       const { key, value } = chunk as any as StorageChunk
       response.cursor = key
       response.data.push(value)

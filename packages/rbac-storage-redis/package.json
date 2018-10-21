@@ -30,7 +30,7 @@
   },
   "scripts": {
     "lint": "tslint './src/**/*.ts' -c ../../tslint.json --project ./tsconfig.json",
-    "test": "mdep test run"
+    "test": "COMPOSE_PROJECT_NAME=rsr mdep test run"
   },
   "bugs": {
     "url": "https://github.com/microfleet/rbac/issues"

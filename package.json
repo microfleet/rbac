@@ -16,9 +16,6 @@
     "build": "tsc -b packages/*/tsconfig.build.json",
     "clean": "rimraf packages/*/lib"
   },
-  "resolutions": {
-    "**/level-iterator-stream/readable-stream": "3.x.x"
-  },
   "devDependencies": {
     "@makeomatic/deploy": "^8.1.1",
     "@semantic-release/changelog": "^3.0.1",

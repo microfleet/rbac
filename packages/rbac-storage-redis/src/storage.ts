@@ -55,9 +55,9 @@ export class RedisStorage<T> implements Storage<T> {
     assert(datum && typeof datum === 'object', Errors.kInvalidFormat)
     const key = this.hash(id)
 
-    // NOTE: lua would be faster
+    // NOTE: lua would be faster and not prone to race-conditions
     // must exist before the update
-    if (await this.exists(id) !== true) {
+    if (!await this.exists(id)) {
       throw Errors.kNotFound
     }
 

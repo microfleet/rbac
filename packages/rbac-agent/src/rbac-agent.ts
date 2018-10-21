@@ -1,8 +1,8 @@
-import Bluebird from 'bluebird'
+import Bluebird = require('bluebird')
 import assert = require('assert')
 import { NotSupportedError } from 'common-errors'
 import * as M from '@microfleet/core'
-import { RBACCore, TPermission, TRole, RBACActionType, RoleModel, Storage, StorageCtor } from '@microfleet/rbac-core'
+import * as R from '@microfleet/rbac-core'
 import { RemoteStorage } from '@microfleet/rbac-storage-remote'
 import readPkgUp = require('read-pkg-up')
 import get = require('get-value')
@@ -12,7 +12,7 @@ export interface RBACActionConfig {
   actionName?: string
   name: string
   deprecated: boolean
-  actionType: RBACActionType[]
+  actionType: R.RBACActionType[]
 }
 
 export type RBACServiceAction = M.ServiceAction & {
@@ -23,50 +23,60 @@ export interface RBACPollingOptions {
   /**
    * Syncronization interval timer
    */
-  interval?: number
+  interval: number
 
   /**
    * Randomization factor
    */
-  random?: number
+  random: number
 }
 
-export interface RBACPluggableAdapter<T> {
+export interface RBACPluggableAdapter {
   /**
    * Default Storage Adapter to use
    */
-  adapter: StorageCtor<T>
+  adapter: R.StorageConstructor
 }
 
-export interface RBACAgentOptions<T> extends RBACPollingOptions, RBACPluggableAdapter<T> {
+export interface RBACDatabaseOptions {
   /**
-   * Required name of storage databases
+   * Storage
+   * @desc Required name of storage databases
    */
   storage: {
     /**
-     * Service routes for role
-     * storage
+     * Role
+     * @desc Service routes for role storage
      */
     role: string
 
     /**
-     * Service routes for permission
-     * storage
+     * Permission
+     * @desc Service routes for permission storage
      */
     permission: string
   }
 
   /**
-   * Database adapter for remote storage
+   * Database
+   * @desc Database adapter for remote storage
    */
   database: any
 }
+
+export type RBACAgentRequiredConfig = Partial<RBACPollingOptions> &
+  Partial<RBACPluggableAdapter> &
+  RBACDatabaseOptions
+
+export type Options = RBACPollingOptions &
+  RBACPluggableAdapter &
+  RBACDatabaseOptions
 
 export class RBACAgent {
   /**
    * Contains default configuration based on RBACAgentOptions
    */
-  private static readonly defaultProps: RBACPollingOptions & RBACPluggableAdapter<any> = {
+  private static readonly defaultProps: RBACPollingOptions & RBACPluggableAdapter = {
     interval: 60000,
     random: 1.5,
     adapter: RemoteStorage,
@@ -75,13 +85,13 @@ export class RBACAgent {
   /**
    * RBAC service adapter
    */
-  private readonly rbac: RBACCore
+  private readonly rbac: R.RBACCore
 
   /**
    * Actions are pulled from the router to
    * be registered in the above mentioned rbac service
    */
-  private readonly router: M.MicrofleetRouter
+  private readonly router: M.Router
 
   /**
    * Used to uniquely identify service
@@ -101,17 +111,17 @@ export class RBACAgent {
   /**
    * Local Cache of roles
    */
-  private rolesByName: { [id: string]: RoleModel } = Object.create(null)
+  private rolesByName: { [id: string]: R.RoleModel } = Object.create(null)
 
   /**
    * Configuration options
    */
-  private readonly opts: RBACAgentOptions<TPermission | TRole>
+  private readonly opts: Options
 
   /**
    * initialized AMQP client must be passed
    */
-  constructor(service: M.Microfleet, opts: RBACAgentOptions<TPermission | TRole>) {
+  constructor(service: M.Microfleet, opts: RBACAgentRequiredConfig) {
     assert(service.hasPlugin('router'), new NotSupportedError('router must be enabled'))
 
     this.opts = Object.assign(RBACAgent.defaultProps, opts)
@@ -122,10 +132,10 @@ export class RBACAgent {
     const SNamespace = this.opts.database
     const SService = this.opts.storage
 
-    this.rbac = new RBACCore({
+    this.rbac = new R.RBACCore({
       storage: {
-        permission: new StorageAdapter(SNamespace, SService.permission) as Storage<TPermission>,
-        role: new StorageAdapter(SNamespace, SService.role) as Storage<TRole>,
+        permission: new StorageAdapter(SNamespace, SService.permission) as R.Storage<R.TPermission>,
+        role: new StorageAdapter(SNamespace, SService.role) as R.Storage<R.TRole>,
       },
     })
 

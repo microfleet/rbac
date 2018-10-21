@@ -5,7 +5,8 @@ module.exports = {
   moduleFileExtensions: [
     'ts',
     'tsx',
-    'js'
+    'js',
+    'json'
   ],
   moduleNameMapper: {
     '^@microfleet/((?:iap|rbac).*)$': '<rootDir>/packages/$1/src'

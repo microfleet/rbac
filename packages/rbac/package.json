@@ -28,7 +28,7 @@
   },
   "scripts": {
     "lint": "tslint './src/**/*.ts' -c ../../tslint.json --project ./tsconfig.json",
-    "test": "jest -c ../../jest.config.js ./__tests__/*.test.ts"
+    "test": "mdep test run"
   },
   "bugs": {
     "url": "https://github.com/microfleet/rbac/issues"
@@ -38,11 +38,14 @@
     "@microfleet/rbac-core": "^0.0.1",
     "@microfleet/rbac-storage-redis": "^0.0.1",
     "@microfleet/transport-amqp": "^13.1.2",
+    "@microfleet/validation": "^8.0.0",
+    "bluebird": "^3.5.2",
     "common-errors": "^1.0.5",
-    "ms-validation": "^7.2.0",
     "stdout-stream": "^1.4.1"
   },
   "devDependencies": {
+    "@types/bluebird": "^3.5.24",
+    "@types/bunyan": "^1.8.5",
     "@types/common-errors": "^1.0.0",
     "@types/node": "^10.12.0",
     "@types/semver": "^5.5.0"
