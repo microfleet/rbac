@@ -12,7 +12,7 @@
     "tester": {
       "working_dir": "/src/packages/rbac-storage-redis",
       "volumes": [
-        "${PWD}/../../:/src"
+        "${PWD}/../../:/src:cached"
       ]
     }
   }

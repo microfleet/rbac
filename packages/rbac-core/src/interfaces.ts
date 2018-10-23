@@ -14,7 +14,7 @@ export interface TRole {
   name: string
   description?: string
   permissions: {
-    [id: string]: TPermission['actionType'][]
+    [id: string]: RBACActionType[]
   }
   meta: {
     [key: string]: string | boolean | number,

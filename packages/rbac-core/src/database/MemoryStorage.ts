@@ -8,6 +8,7 @@ import semver = require('semver')
 import { kConflict, kInvalidFormat, kNotFound, kVersionLow } from '../Errors'
 import { Storage, StorageFilter, StorageList } from '../interfaces'
 import { LevelUp } from 'levelup'
+import mergeWith = require('lodash.mergewith')
 import S2A from './stream-to-async'
 
 export interface StorageChunk {
@@ -17,12 +18,12 @@ export interface StorageChunk {
 
 export class RBACMemoryStorage<T> implements Storage<T> {
   private readonly storage: LevelUp
-  private readonly merge: (...args: Partial<T>[]) => T
+  private readonly merge: typeof mergeWith
 
   constructor() {
     const mem = require('level-mem')
 
-    this.merge = require('lodash.merge')
+    this.merge = require('lodash.mergewith')
     this.storage = mem(`rbac:memory:${Date.now()}`, { valueEncoding: 'json' })
   }
 
@@ -51,11 +52,17 @@ export class RBACMemoryStorage<T> implements Storage<T> {
     return datum
   }
 
-  public async update(id: string, datum: any) {
+  public async update(id: string, datum: Partial<T>) {
     assert(datum && typeof datum === 'object', kInvalidFormat)
 
     const original = await this.read(id)
-    const update = this.merge(original, datum)
+    const update = this.merge(original, datum, (_, srcValue) => {
+      if (Array.isArray(srcValue)) {
+        return srcValue
+      }
+
+      return undefined
+    })
     await this.storage.put(id, update)
 
     return update

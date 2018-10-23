@@ -22,9 +22,9 @@ export class Role {
     return role
   }
 
-  public async update(id: string, datum: TRole) {
+  public async update(id: string, datum: Partial<TRole>) {
     const serialized = await this.storage.update(id, datum)
-    return new RoleModel(serialized as TRole)
+    return new RoleModel(serialized)
   }
 
   public async remove(id: string) {

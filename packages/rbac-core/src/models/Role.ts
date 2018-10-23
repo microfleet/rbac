@@ -1,13 +1,13 @@
 import findMyWay = require('find-my-way')
 import Hyperid = require('hyperid')
-import { TPermission, TRole } from '../interfaces'
+import { TPermission, TRole, RBACActionType } from '../interfaces'
 
 const noop = () => {/* do nothing */}
 const instance = Hyperid({ fixedLength: true, urlSafe: true })
 
 interface PermissionLike {
   id: TPermission['id']
-  actionType: TPermission['actionType'][]
+  actionType: RBACActionType[]
 }
 
 export class Role {

@@ -1,12 +1,12 @@
-import Bluebird = require('bluebird')
+import * as Bluebird from 'bluebird'
 import assert = require('assert')
-import { NotSupportedError } from 'common-errors'
+import { NotSupportedError, HttpStatusError } from 'common-errors'
 import * as M from '@microfleet/core'
 import * as R from '@microfleet/rbac-core'
 import { RemoteStorage } from '@microfleet/rbac-storage-remote'
 import { DeepPartial } from 'ts-essentials'
 import readPkgUp = require('read-pkg-up')
-import get = require('get-value')
+import * as get from 'get-value'
 
 export interface RBACActionConfig {
   id?: string
@@ -19,6 +19,16 @@ export interface RBACActionConfig {
 export type RBACServiceAction = DeepPartial<M.ServiceAction> & {
   rbac?: RBACActionConfig
 }
+
+export type RBACServiceRequest = M.ServiceRequest & {
+  action: M.ServiceAction & {
+    rbac?: RBACActionConfig
+  }
+}
+
+export type MService = M.Microfleet
+  & M.RouterPlugin
+  & M.LoggerPlugin
 
 export interface RBACPollingOptions {
   /**
@@ -75,6 +85,11 @@ export type Options = RBACPollingOptions &
 
 export class RBACAgent {
   /**
+   * Error when rbac can't match action and passed role
+   */
+  public static readonly kRBACDenied = new HttpStatusError(403, '[rbac] access denied')
+
+  /**
    * Contains default configuration based on RBACAgentOptions
    */
   private static readonly defaultProps: RBACPollingOptions & RBACPluggableAdapter = {
@@ -93,6 +108,11 @@ export class RBACAgent {
    * be registered in the above mentioned rbac service
    */
   private readonly router: M.Router
+
+  /**
+   * Attaches bunyan-compatible logger instance
+   */
+  private readonly log: any
 
   /**
    * Used to uniquely identify service
@@ -122,11 +142,12 @@ export class RBACAgent {
   /**
    * initialized AMQP client must be passed
    */
-  constructor(service: M.Microfleet, opts: RBACAgentRequiredConfig) {
+  constructor(service: MService, opts: RBACAgentRequiredConfig) {
     assert(service.hasPlugin('router'), new NotSupportedError('router must be enabled'))
 
     this.opts = Object.assign(RBACAgent.defaultProps, opts)
     this.router = service.router
+    this.log = service.log
     this.name = service.config.name
 
     const StorageAdapter = this.opts.adapter
@@ -140,6 +161,7 @@ export class RBACAgent {
       },
     })
 
+    service.router.extensions.register('postAuth', this.verifyRequest)
     service.addConnector(M.ConnectorsTypes.migration, this.init)
   }
 
@@ -174,7 +196,7 @@ export class RBACAgent {
 
     const { interval, random } = this.opts
 
-    const nextTime = getRandomInt((interval as number), (interval as number) * (random as number))
+    const nextTime = getRandomInt(interval, interval * random)
     this.syncInterval = setTimeout(this.syncRoles, nextTime)
     this.syncInterval.unref()
   }
@@ -188,11 +210,16 @@ export class RBACAgent {
     }
 
     for (const roleId of roles) {
-      const role = this.rolesByName[roleId]
+      let role = this.rolesByName[roleId]
 
       // no role -> next
       if (role === undefined) {
-        continue
+        try {
+          role = this.rolesByName[roleId] = await this.rbac.role.read(roleId)
+        } catch (e) {
+          this.log.debug({ err: e }, 'failed to get role %s', roleId)
+          continue
+        }
       }
 
       if (role.matchesPermission(id)) {
@@ -222,6 +249,23 @@ export class RBACAgent {
     })
 
     rbac.id = id
+  }
+
+  private verifyRequest = async (error: any, request: RBACServiceRequest) => {
+    if (error) {
+      throw error
+    }
+
+    if (request.action.rbac === undefined) {
+      return [error, request]
+    }
+
+    const roles = get(request, 'auth.roles')
+    if (!Array.isArray(roles) || !await this.match(roles, request.action)) {
+      throw RBACAgent.kRBACDenied
+    }
+
+    return [error, request]
   }
 }
 
