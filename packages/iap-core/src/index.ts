@@ -1,6 +1,6 @@
 import assert = require('assert')
 import { promisify } from 'bluebird'
-import getValue = require('get-value')
+import * as getValue from 'get-value'
 import { sign, SignOptions, verify, VerifyOptions } from 'jsonwebtoken'
 import * as Errors from './Errors'
 

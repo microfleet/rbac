@@ -151,13 +151,13 @@ export class RBACAgent {
     this.name = service.config.name
 
     const StorageAdapter = this.opts.adapter
-    const SNamespace = this.opts.database
+    const Sdb = this.opts.database
     const SService = this.opts.storage
 
     this.rbac = new R.RBACCore({
       storage: {
-        permission: new StorageAdapter(SNamespace, SService.permission) as R.Storage<R.TPermission>,
-        role: new StorageAdapter(SNamespace, SService.role) as R.Storage<R.TRole>,
+        permission: new StorageAdapter(Sdb.permission || Sdb, SService.permission) as R.Storage<R.TPermission>,
+        role: new StorageAdapter(Sdb.role || Sdb, SService.role) as R.Storage<R.TRole>,
       },
     })
 
@@ -238,7 +238,7 @@ export class RBACAgent {
       return
     }
 
-    const { id } = await this.rbac.permission.register({
+    const Permission = await this.rbac.permission.register({
       serviceName: this.name,
       version: this.version,
       name: rbac.name,
@@ -248,7 +248,7 @@ export class RBACAgent {
       reserved: false,
     })
 
-    rbac.id = id
+    rbac.id = Permission.id()
   }
 
   private verifyRequest = async (error: any, request: RBACServiceRequest) => {

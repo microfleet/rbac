@@ -20,8 +20,11 @@ export class Permission {
   }
 
   public async register(params: PermissionRegister) {
-    const permission = PermissionModel.prepare(params)
-    return this.storage.patch(permission.id(), permission.toJSON())
+    const permissionDatum = PermissionModel.prepare(params)
+    const updatedPermission = await this.storage
+      .patch(permissionDatum.id(), permissionDatum.toJSON())
+
+    return new PermissionModel(updatedPermission)
   }
 
   public async unregister(id: TPermission['id']) {

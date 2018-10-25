@@ -1,4 +1,4 @@
-import { Errors, Storage, StorageFilter, StorageList } from '@microfleet/rbac-core'
+import { Errors, Storage, StorageFilter, StorageList, VersionedDatum } from '@microfleet/rbac-core'
 import assert = require('assert')
 import { Redis } from 'ioredis'
 import semver = require('semver')
@@ -76,23 +76,28 @@ export class RedisStorage<T> implements Storage<T> {
 
   // TODO: rework with lua, so that on update we verify
   // that previous version in the database is still relevant
-  public async patch(id: string, datum: any): Promise<T> {
+  public async patch(id: string, datum: VersionedDatum<T>): Promise<VersionedDatum<T>> {
     assert(datum && typeof datum === 'object', Errors.kInvalidFormat)
     assert(semver.valid(datum.version), Errors.kInvalidFormat)
 
-    let original
+    let original: VersionedDatum<T> | void
     try {
-      original = await this.read(id)
-      if (!semver.gte(datum.version, (original as any).version)) {
-        throw Errors.kVersionLow
-      }
+      original = await this.read(id) as any
     } catch (e) {
       if (e !== Errors.kNotFound) {
         throw e
       }
     }
 
-    await this.storage.hmset(this.hash(id), this.serialize(datum))
+    // skip update and return as is
+    if (original && semver.gte(original.version, datum.version)) {
+      return original
+    }
+
+    await Promise.all([
+      this.storage.sadd(this.index, id),
+      this.storage.hmset(this.hash(id), this.serialize(datum)),
+    ])
 
     return Object.assign({}, original, datum)
   }
@@ -118,12 +123,14 @@ export class RedisStorage<T> implements Storage<T> {
     }) as any as NodeJS.ReadStream
 
     const workers = []
-    for await (const id of stream) {
-      workers.push((
-        this.storage
-          .hgetall(this.hash(id as string))
-          .then(this.deserialize)
-      ))
+    for await (const ids of stream) {
+      for (const id of ids) {
+        workers.push((
+          this.storage
+            .hgetall(this.hash(id))
+            .then(this.deserialize)
+        ))
+      }
     }
 
     response.data = await Promise.all(workers)
@@ -131,12 +138,12 @@ export class RedisStorage<T> implements Storage<T> {
     return response
   }
 
-  private key(id: string) {
+  private key(id: string | number) {
     return `${this.db}!${id}`
   }
 
-  private hash(id: string) {
-    return `${this.hash}:${id}`
+  private hash(id: string | number) {
+    return `${this.index}!${id}`
   }
 
   private serialize(datum: T): KV {

@@ -1,11 +1,36 @@
-import { Storage, StorageFilter, StorageList } from '@microfleet/rbac-core'
+import assert = require('assert')
+import { Storage, StorageFilter, StorageList, VersionedDatum } from '@microfleet/rbac-core'
+
+export interface RoutingTable {
+  [action: string]: string
+}
+
+export interface Config {
+  amqp: any
+  routingTable: RoutingTable
+}
+
+export const defaultRolesRoutingTable = {
+  read: 'read',
+  create: 'create',
+  update: 'update',
+  list: 'list',
+}
+
+export const defaultPermissionsRoutingTable = {
+  read: 'read',
+  list: 'list',
+  patch: 'register',
+}
 
 export class RemoteStorage<T> implements Storage<T> {
-  private remote: any
-  private serviceName: string
+  private readonly remote: any
+  private readonly serviceName: string
+  private readonly routingTable: RoutingTable
 
-  constructor(amqp: any, serviceName: string) {
-    this.remote = amqp
+  constructor(config: Config, serviceName: string) {
+    this.remote = config.amqp
+    this.routingTable = config.routingTable
     this.serviceName = serviceName
   }
 
@@ -29,7 +54,7 @@ export class RemoteStorage<T> implements Storage<T> {
       .publishAndWait(this.route('update'), { id, datum })
   }
 
-  public async patch(id: string, datum: any): Promise<T> {
+  public async patch(id: string, datum: VersionedDatum<T>): Promise<VersionedDatum<T>> {
     return this.remote
       .publishAndWait(this.route('patch'), { id, datum })
   }
@@ -44,7 +69,9 @@ export class RemoteStorage<T> implements Storage<T> {
       .publishAndWait(this.route('list'), { filter })
   }
 
-  private route(routingKey: string): string {
+  private route(action: string): string {
+    const routingKey = this.routingTable[action]
+    assert(routingKey, `${action} routing not avaiable`)
     return `${this.serviceName}.${routingKey}`
   }
 }

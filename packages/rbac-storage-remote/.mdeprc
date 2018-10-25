@@ -16,7 +16,7 @@
         "${PWD}/../../:/src:cached"
       ],
       "environment": {
-        "NCONF_FILE_PATH": "[\"/src/packages/rbac/__tests__/configs\"]"
+        "NCONF_FILE_PATH": "[\"/src/packages/rbac-storage-remote/__tests__/configs\"]"
       }
     }
   }

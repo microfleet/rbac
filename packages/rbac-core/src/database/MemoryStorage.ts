@@ -5,8 +5,8 @@
 
 import assert = require('assert')
 import semver = require('semver')
-import { kConflict, kInvalidFormat, kNotFound, kVersionLow } from '../Errors'
-import { Storage, StorageFilter, StorageList } from '../interfaces'
+import { kConflict, kInvalidFormat, kNotFound } from '../Errors'
+import { Storage, StorageFilter, StorageList, VersionedDatum } from '../interfaces'
 import { LevelUp } from 'levelup'
 import mergeWith = require('lodash.mergewith')
 import S2A from './stream-to-async'
@@ -68,26 +68,30 @@ export class RBACMemoryStorage<T> implements Storage<T> {
     return update
   }
 
-  public async patch(id: string, datum: any) {
+  public async patch(id: string, datum: VersionedDatum<T>) {
     assert(datum && typeof datum === 'object', kInvalidFormat)
     assert(semver.valid(datum.version), kInvalidFormat)
-    let update = datum
 
+    let original: VersionedDatum<T> | void
     try {
-      const original = await this.read(id)
-      if (!semver.gte(datum.version, original.version)) {
-        throw kVersionLow
-      }
-      update = this.merge(original, datum)
+      original = await this.read(id) as VersionedDatum<T>
     } catch (e) {
       if (e !== kNotFound) {
         throw e
       }
     }
 
-    await this.storage.put(id, update)
+    let update = datum
+    if (original !== undefined && semver.gte(datum.version, original.version)) {
+      update = this.merge(original, datum)
+    }
 
-    return update
+    if (original === undefined || update !== datum) {
+      await this.storage.put(id, update)
+      return update
+    }
+
+    return original
   }
 
   public async remove(id: string) {

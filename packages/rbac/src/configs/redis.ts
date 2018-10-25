@@ -2,11 +2,19 @@
  * Contains Redis Sentinel Configuration
  */
 export const redis = {
-  sentinels: [{
-    host: 'redis-sentinel',
-    port: 26379,
-  }],
-  name: 'mservice',
+  sentinels: {
+    $filter: 'env',
+    $default: [{
+      host: 'redis-sentinel',
+      port: 26379,
+    }],
+    production: [],
+  },
+  name: {
+    $filter: 'env',
+    $default: 'mservice',
+    production: '',
+  },
   options: {
     keyPrefix: '{rbac}',
     dropBufferSupport: true,

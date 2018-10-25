@@ -1,33 +1,32 @@
 {
-  "$id": "Role",
+  "$id": "input.roles.create",
   "type": "object",
-  "required": ["id", "name", "permissions"],
+  "required": ["name"],
   "properties": {
-    "id": {
-      "$ref": "common#/definitions/uint64_id"
-    },
     "name": {
-      "$ref": "common#/definitions/humanReadable"
+      "$ref": "Permission#/properties/name"
     },
     "description": {
-      "$ref": "common#/definitions/text"
+      "$ref": "Permission#/properties/description",
+      "default": ""
     },
     "permissions": {
       "type": "object",
+      "default": {},
       "additionalProperties": {
         "$ref": "Permission#/properties/actionType"
       }
     },
     "meta": {
       "type": "object",
-      "description": "any scalar meta that could be useful in business logic",
+      "default": {},
       "additionalProperties": {
         "anyOf": [{
           "type": "string"
         }, {
-          "type": "boolean"
-        }, {
           "type": "number"
+        }, {
+          "type": "boolean"
         }]
       }
     }

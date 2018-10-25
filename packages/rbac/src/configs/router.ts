@@ -1,5 +1,6 @@
 import { ActionTransport, routerExtension } from '@microfleet/core'
-import path from 'path'
+import { resolve } from 'path'
+import { internalAuthStrategy } from '../auth/internal'
 
 /**
  * This extension defaults schemas to the name of the action
@@ -16,12 +17,17 @@ const auditLog = routerExtension('audit/log')
  */
 export const router = {
   extensions: {
-    enabled: ['preRequest', 'postRequest', 'preResponse'],
+    enabled: ['preRequest', 'postRequest', 'postAuth', 'preResponse'],
     register: [autoSchema, auditLog],
   },
   routes: {
-    directory: path.resolve(__dirname, '../actions'),
+    directory: resolve(__dirname, '../actions'),
     prefix: 'rbac',
-    transports: [ActionTransport.amqp, ActionTransport.http, ActionTransport.internal],
+    transports: [ActionTransport.amqp, ActionTransport.internal],
+  },
+  auth: {
+    strategies: {
+      internal: internalAuthStrategy,
+    },
   },
 }

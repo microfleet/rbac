@@ -1,0 +1,4 @@
+{
+  "$id": "response.roles.read",
+  "$ref": "Role"
+}

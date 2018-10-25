@@ -1,9 +1,9 @@
-import path from 'path'
+import { resolve } from 'path'
 
 /**
  * Default name of the service
  */
-export const name = 'sl-grpc-proxy'
+export const name = 'rbac'
 
 /**
  * Enables plugins. This is a minimum list
@@ -23,7 +23,7 @@ export const plugins = [
  */
 export const logger = {
   debug: process.env.NODE_ENV === 'development',
-  defaultLogger: process.env.NODE_ENV === 'development',
+  defaultLogger: true,
 }
 
 /**
@@ -35,5 +35,5 @@ export const validator = {
     useDefaults: true,
     validateSchema: 'log',
   },
-  schemas: [path.resolve(__dirname, '../../schemas')],
+  schemas: [resolve(__dirname, '../../schemas')],
 }

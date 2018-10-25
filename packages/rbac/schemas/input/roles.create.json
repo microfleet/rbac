@@ -1,33 +1,31 @@
 {
-  "$id": "Role",
+  "$id": "input.roles.update",
   "type": "object",
-  "required": ["id", "name", "permissions"],
+  "minProperties": 1,
   "properties": {
-    "id": {
-      "$ref": "common#/definitions/uint64_id"
-    },
     "name": {
-      "$ref": "common#/definitions/humanReadable"
+      "$ref": "Permission#/properties/name"
     },
     "description": {
-      "$ref": "common#/definitions/text"
+      "$ref": "Permission#/properties/description"
     },
     "permissions": {
       "type": "object",
+      "minProperties": 1,
       "additionalProperties": {
         "$ref": "Permission#/properties/actionType"
       }
     },
     "meta": {
       "type": "object",
-      "description": "any scalar meta that could be useful in business logic",
+      "minProperties": 1,
       "additionalProperties": {
         "anyOf": [{
           "type": "string"
         }, {
-          "type": "boolean"
-        }, {
           "type": "number"
+        }, {
+          "type": "boolean"
         }]
       }
     }

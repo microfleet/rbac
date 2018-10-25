@@ -1,7 +1,7 @@
 import { RBACMemoryStorage, TPermission, Errors } from '../src'
 
 let storage: RBACMemoryStorage<TPermission>
-const { kConflict, kInvalidFormat, kNotFound, kVersionLow } = Errors
+const { kConflict, kInvalidFormat, kNotFound } = Errors
 const permissionSample: TPermission = {
   actionType: ['GET', 'POST', 'PATCH', 'DELETE'],
   deprecated: false,
@@ -64,7 +64,9 @@ describe('update', () => {
 
   test('updating to invalid format fails', async () => {
     expect.assertions(1)
-    await expect(storage.update(permissionSample.id, 'nope'))
+
+    // NOTE: deliberatly set as any to ignore type
+    await expect(storage.update(permissionSample.id, 'nope' as any))
       .rejects.toThrow(kInvalidFormat.message)
   })
 
@@ -87,19 +89,19 @@ describe('patch', () => {
 
   test('updating to invalid format fails', async () => {
     expect.assertions(1)
-    await expect(storage.patch(permissionSample.id, 'nope'))
+    await expect(storage.patch(permissionSample.id, 'nope' as any))
       .rejects.toThrow(kInvalidFormat.message)
   })
 
   test('updating existing data to lower version fails with soft error', async () => {
     expect.assertions(1)
-    await expect(storage.patch(permissionSample.id, { version: '0.9.9', deprecated: true }))
-      .rejects.toThrow(kVersionLow)
+    await expect(storage.patch(permissionSample.id, { ...permissionSample, version: '0.9.9', deprecated: true }))
+      .resolves.toEqual(permissionSample)
   })
 
   test('updating existing data to new version succeeds', async () => {
     expect.assertions(1)
-    await expect(storage.patch(permissionSample.id, { version: '1.0.1' }))
+    await expect(storage.patch(permissionSample.id, { ...permissionSample, version: '1.0.1' }))
       .resolves.toEqual({
         ...permissionSample,
         version: '1.0.1',
