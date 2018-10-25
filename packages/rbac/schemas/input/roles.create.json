@@ -1,0 +1,33 @@
+{
+  "$id": "input.roles.update",
+  "type": "object",
+  "minProperties": 1,
+  "properties": {
+    "name": {
+      "$ref": "Permission#/properties/name"
+    },
+    "description": {
+      "$ref": "Permission#/properties/description"
+    },
+    "permissions": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "Permission#/properties/actionType"
+      }
+    },
+    "meta": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "anyOf": [{
+          "type": "string"
+        }, {
+          "type": "number"
+        }, {
+          "type": "boolean"
+        }]
+      }
+    }
+  }
+}

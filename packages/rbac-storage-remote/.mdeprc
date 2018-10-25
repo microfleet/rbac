@@ -1,0 +1,23 @@
+{
+  "node": "10.12.0",
+  "nycCoverage": false,
+  "coverage": false,
+  "test_framework": "jest -c ../../jest.config.js --coverageDirectory <coverageDirectory>",
+  "tests": "__tests__/*.test.ts",
+  "auto_compose": true,
+  "services": [
+    "redisSentinel",
+    "rabbitmq"
+  ],
+  "extras": {
+    "tester": {
+      "working_dir": "/src/packages/rbac",
+      "volumes": [
+        "${PWD}/../../:/src:cached"
+      ],
+      "environment": {
+        "NCONF_FILE_PATH": "[\"/src/packages/rbac-storage-remote/__tests__/configs\"]"
+      }
+    }
+  }
+}

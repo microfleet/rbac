@@ -1,0 +1,10 @@
+{
+  "$id": "input.roles.read",
+  "type": "object",
+  "required": ["id"],
+  "properties": {
+    "id": {
+      "$ref": "Role#/properties/id"
+    }
+  }
+}

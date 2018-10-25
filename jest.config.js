@@ -1,18 +1,23 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  collectCoverage: process.env.CI === 'true',
   moduleFileExtensions: [
     'ts',
     'tsx',
-    'js'
+    'js',
+    'json'
   ],
   moduleNameMapper: {
-    '@microfleet/(.*)': '<rootDir>/packages/$1'
+    '^@microfleet/((?:iap|rbac).*)$': '<rootDir>/packages/$1/src'
   },
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest'
   },
-  testMatch: [
-    '**/*.test.(ts|tsx)'
-  ]
+  globals: {
+    'ts-jest': {
+      tsConfig: '<rootDir>/tsconfig.test.json',
+      diagnostics: process.env.CI === 'true'
+    }
+  }
 };

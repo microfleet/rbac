@@ -1,0 +1,4 @@
+{
+  "$id": "response.permissions.read",
+  "$ref": "Permission"
+}

@@ -1,0 +1,10 @@
+{
+  "$id": "input.permissions.read",
+  "type": "object",
+  "required": ["id"],
+  "properties": {
+    "id": {
+      "$ref": "Permission#/properties/id"
+    }
+  }
+}

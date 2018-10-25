@@ -1,0 +1,34 @@
+{
+  "$id": "input.roles.create",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "name": {
+      "$ref": "Permission#/properties/name"
+    },
+    "description": {
+      "$ref": "Permission#/properties/description",
+      "default": ""
+    },
+    "permissions": {
+      "type": "object",
+      "default": {},
+      "additionalProperties": {
+        "$ref": "Permission#/properties/actionType"
+      }
+    },
+    "meta": {
+      "type": "object",
+      "default": {},
+      "additionalProperties": {
+        "anyOf": [{
+          "type": "string"
+        }, {
+          "type": "number"
+        }, {
+          "type": "boolean"
+        }]
+      }
+    }
+  }
+}

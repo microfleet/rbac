@@ -1,0 +1,31 @@
+{
+  "$id": "response.permissions.list",
+  "type": "object",
+  "required": ["meta", "data"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["cursor"],
+      "properties": {
+        "cursor": {
+          "type": "string"
+        },
+        "page": {
+          "type": "number"
+        },
+        "pages": {
+          "type": "number"
+        },
+        "limit": {
+          "type": "number"
+        }
+      }
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "Permission"
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "@microfleet/rbac-storage-remote",
+  "version": "0.0.1",
+  "description": "microfleet RBAC redis storage module",
+  "keywords": [
+    "rbac",
+    "redis",
+    "microfleet",
+    "microservices"
+  ],
+  "author": "Vitaly Aminev <v@makeomatic.ca>",
+  "homepage": "https://github.com/microfleet/rbac#readme",
+  "license": "MIT",
+  "typings": "lib/index.d.ts",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib/",
+    "src/"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microfleet/rbac.git"
+  },
+  "scripts": {
+    "lint": "tslint './src/**/*.ts' -c ../../tslint.json --project ./tsconfig.json",
+    "test": "jest -c ../../jest.config.js ./__tests__/*.test.ts"
+  },
+  "bugs": {
+    "url": "https://github.com/microfleet/rbac/issues"
+  },
+  "dependencies": {
+    "@microfleet/rbac-core": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.0"
+  }
+}

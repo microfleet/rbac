@@ -1,0 +1,28 @@
+{
+  "$id": "input.permissions.register",
+  "type": "object",
+  "required": ["serviceName", "value", "name", "version", "actionType"],
+  "properties": {
+    "version": {
+      "$ref": "Permission#/properties/version"
+    },
+    "name": {
+      "$ref": "Permission#/properties/name"
+    },
+    "serviceName": {
+      "$ref": "common#/definitions/serviceName"
+    },
+    "value": {
+      "type": "string",
+      "maxLength": 96,
+      "pattern": "^[a-zA-Z]{3,32}(?:\\.[a-zA-Z]{3,32})*",
+      "description": "permission level"
+    },
+    "deprecated": {
+      "$ref": "Permission#/properties/deprecated"
+    },
+    "actionType": {
+      "$ref": "Permission#/properties/actionType"
+    }
+  }
+}

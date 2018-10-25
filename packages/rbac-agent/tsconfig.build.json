@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib"
+  },
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "references": [
+    { "path": "../rbac-core/tsconfig.build.json" },
+    { "path": "../rbac-storage-remote/tsconfig.build.json" }
+  ]
+}
